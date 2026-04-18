@@ -12,3 +12,21 @@ Content-Type: application/json
 
 ### 
 
+POST http://localhost:3000/auth/signup
+Content-Type: application/json
+
+{
+    "name": "Ryan",
+    "email": "ryantest@gmail.com",
+    "password": "umh_ryantest"
+}
+
+###
+
+POST http://localhost:3000/auth/signin
+Content-Type: application/json
+
+{
+    "email": "ryantest@gmail.com",
+    "password": "umh_ryantest"
+}

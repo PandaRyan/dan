@@ -5,9 +5,6 @@ const createError = require('http-errors');
 const express = require('express');
 const app = express();
 
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
-
 const mongoose = require('mongoose');
 
 const connectDB = async () => {
@@ -26,8 +23,13 @@ app.use(express.urlencoded({extended: false}));
 
 
 // routes
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const authRouter = require('./routes/auth');
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/auth', authRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
