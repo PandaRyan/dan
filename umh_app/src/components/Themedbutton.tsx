@@ -5,7 +5,7 @@ interface ThemedButtonProps extends ButtonProps {
 }
 
 
-const Themedbutton = ({ title, sx, ...props}: ThemedButtonProps) => {
+const ThemedButton = ({ title, sx}: ThemedButtonProps) => {
   return (
     <>
     <Button 
@@ -33,4 +33,4 @@ const Themedbutton = ({ title, sx, ...props}: ThemedButtonProps) => {
   )
 }
 
-export default Themedbutton
+export default ThemedButton

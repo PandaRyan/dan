@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Box, AppBar, Toolbar, Typography, CssBaseline, Stack} from "@mui/material"
-import Themedbutton from "./Themedbutton";
+import Themedbutton from "./ThemedButton";
 import bukitLogo from "../assets/images/bukit.png";
 
 const Account = () => {
