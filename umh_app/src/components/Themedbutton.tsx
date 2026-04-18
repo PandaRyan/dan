@@ -1,6 +1,11 @@
-import { Button } from "@mui/material"
+import { Button, type ButtonProps } from "@mui/material"
 
-const Themedbutton = ({ title }: { title: string }) => {
+interface ThemedButtonProps extends ButtonProps {
+  title: string;
+}
+
+
+const Themedbutton = ({ title, sx}: ThemedButtonProps) => {
   return (
     <>
     <Button 
@@ -18,6 +23,7 @@ const Themedbutton = ({ title }: { title: string }) => {
       "&:active" : {
         backgroundColor: '#6f874b'
       },
+      ...sx,
     }}
     >
       {title}
