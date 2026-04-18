@@ -1,6 +1,6 @@
 import './App.css'
 import { ThemedTextField } from './components/ThemedTextField'
-import Themedbutton from "./components/Themedbutton"
+import ThemedButton from "./components/ThemedButton"
 import { SignUp } from './components/auth/SignUp';
 import { SignIn } from './components/auth/SignIn';
 

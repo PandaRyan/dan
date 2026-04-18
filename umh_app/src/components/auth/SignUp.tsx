@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Box, Typography, Container, Link, MenuItem } from '@mui/material';
 
 import { ThemedTextField } from '../ThemedTextField';
-import Themedbutton from '../Themedbutton';
+import Themedbutton from '../ThemedButton';
 
 const incomeCategories = [
     { value: 'B40', label: 'B40 (Household Income < RM 5,250)' },

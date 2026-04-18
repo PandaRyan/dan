@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Typography, Container, Link } from '@mui/material';
 import { ThemedTextField } from '../ThemedTextField';
-import Themedbutton from '../Themedbutton';
+import Themedbutton from '../ThemedButton';
 
 export const SignIn: React.FC = () => {
     const [formData, setFormData] = useState({
