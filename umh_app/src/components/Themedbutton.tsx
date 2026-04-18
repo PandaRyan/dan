@@ -25,6 +25,7 @@ const ThemedButton = ({ title, sx}: ThemedButtonProps) => {
       },
       ...sx,
     }}
+    {...props}
     >
       {title}
     </Button>
