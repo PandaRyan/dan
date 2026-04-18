@@ -3,6 +3,8 @@ var router = express.Router();
 const User = require('../models/Users')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const verify = require('../middleware/auth');
+const UserProfile = require('../models/UserProfile');
 
 router.post('/signin', async (req, res) => {
     let { email, password } = req.body
@@ -41,16 +43,44 @@ router.post('/signup', async (req, res) => {
         const newUser = new User({
             name: name,
             email: email,
-            password: hashedPassword
+            password: hashedPassword,
+            onboarding: false
         })
 
         const savedUser = await newUser.save();
-        res.status(201).json({status: "success"})
+        res.status(201).json({status: "success", token: token})
 
 
     } catch (err) {
         res.status(500).json({status: "failed", error: err.message})
     }
 });
+
+router.post('/signup/onboarding', verify, async (req, res) => {
+    try {
+        let { birthYear, state, incomeCategory } = req.body
+        let { Authorization } = req.header
+
+        const userProfileData = new UserProfile({
+            user: req.user._id,
+            birthYear: birthYear,
+            state: state,
+            incomeCategory: incomeCategory
+        })
+
+        const savedData = await userProfileData.save();
+        
+        const updatedUser = await User.findByIdAndUpdate(
+            req.user._id,
+            { onboarding: true },
+            { new: true }
+        )
+            
+        res.status(201).json({status: "success"})
+
+    } catch (err) {
+        res.status(500).json({status: "failed", error: err})
+    }
+})
 
 module.exports = router

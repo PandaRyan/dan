@@ -30,3 +30,15 @@ Content-Type: application/json
     "email": "ryantest@gmail.com",
     "password": "umh_ryantest"
 }
+
+###
+
+POST http://localhost:3000/auth/signup/onboarding
+Content-Type: application/json
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OWUzYWQzZWY0MmExM2VmMzFhNWQwOTIiLCJpYXQiOjE3NzY1Mjk3OTcsImV4cCI6MTc3NjU0MDU5N30.Fr2gxQxRJehN79H-J87PrjmP_ACunJBx561fzqHMd24
+
+{
+    "birthYear": "2008",
+    "state": "Selangor",
+    "incomeCategory": "B40"
+}
