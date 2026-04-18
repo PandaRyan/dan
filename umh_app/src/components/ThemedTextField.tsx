@@ -14,9 +14,9 @@ export const ThemedTextField: React.FC<ThemedTextFieldProps> = ({ name, ...props
             fullWidth
             margin="normal"
             sx={{
-                backgroundColor: '#FFFFFF',     //white background
+                backgroundColor: '#FFFFFF',
 
-                '& .MuiOutlinedInput-root': {       //box border
+                '& .MuiOutlinedInput-root': {
                     borderRadius: '8px',
 
                     '& fieldset': {
@@ -24,11 +24,11 @@ export const ThemedTextField: React.FC<ThemedTextFieldProps> = ({ name, ...props
                         borderWidth: '2px',
                     },
 
-                    '&:hover fieldset': {       //hover state
+                    '&:hover fieldset': {
                         borderColor: '#74924A',
                     },
 
-                    '&.Mui-focused fieldset': {     //typing state
+                    '&.Mui-focused fieldset': {
                         borderColor: '#6B5441',
                     },
                 },
