@@ -5,10 +5,11 @@ interface ThemedButtonProps extends ButtonProps {
 }
 
 
-const ThemedButton = ({ title, sx, onClick, ...props}: ThemedButtonProps) => {
+const Themedbutton = ({ title, sx, onClick, onMouseEnter, ...props }: ThemedButtonProps) => {
   return (
     <>
     <Button 
+    {...props}
     variant="contained"
     disableRipple
     disableElevation
@@ -25,8 +26,8 @@ const ThemedButton = ({ title, sx, onClick, ...props}: ThemedButtonProps) => {
       },
       ...sx,
     }}
-    {...props}
     onClick = {onClick}
+    onMouseEnter = {onMouseEnter}
     >
       {title}
     </Button>
@@ -34,4 +35,4 @@ const ThemedButton = ({ title, sx, onClick, ...props}: ThemedButtonProps) => {
   )
 }
 
-export default ThemedButton
+export default Themedbutton
