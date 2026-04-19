@@ -42,3 +42,7 @@ authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OWUzYWQzZWY0MmEx
     "state": "Selangor",
     "incomeCategory": "B40"
 }
+
+###
+
+GET http://localhost:5000/news

@@ -1,6 +1,6 @@
 import './App.css'
 import { NavBar } from './components/NavBar'
-import { NewsPage } from './components/news/News'
+import { NewsPage } from './routes/news/News'
 import { Outlet } from 'react-router-dom'
 
 function App() {
@@ -8,7 +8,7 @@ function App() {
     <>
       <NavBar />
       <main>
-        <NewsPage />
+        <Outlet/>
       </main>
     </>
   )

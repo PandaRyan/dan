@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, Container, Link, MenuItem } from '@mui/material';
 
-import { ThemedTextField } from '../ThemedTextField';
-import Themedbutton from '../Themedbutton';
-import { useAuth } from '../context/AuthContext';
+import { ThemedTextField } from '../../components/ThemedTextField';
+import Themedbutton from '../../components/Themedbutton';
+import { useAuth } from '../../components/context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 const incomeCategories = [
@@ -198,7 +198,6 @@ export const Onboarding: React.FC = () => {
         onboardingFormData.state = state
 
         if (authUser) {
-            alert('here')
             try {
                 const response = await fetch('http://localhost:5000/auth/signup/onboarding', {
                     method: 'POST',

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Box, Typography, Container, Link } from '@mui/material';
-import { ThemedTextField } from '../ThemedTextField';
-import Themedbutton from '../Themedbutton';
-import { useAuth } from '../context/AuthContext';
+import { ThemedTextField } from '../../components/ThemedTextField';
+import Themedbutton from '../../components/Themedbutton';
+import { useAuth } from '../../components/context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 export const SignIn: React.FC = () => {
