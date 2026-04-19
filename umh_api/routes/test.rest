@@ -45,4 +45,5 @@ authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OWUzYWQzZWY0MmEx
 
 ###
 
-GET http://localhost:5000/news
+POST http://localhost:5000/news
+Content-Type: application/json

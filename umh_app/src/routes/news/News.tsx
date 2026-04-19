@@ -64,11 +64,13 @@ export const NewsPage: React.FC = () => {
     useEffect(() => {       //use when page loads
         const fetchNews = async () => {     //fetch when page loads
             try {
-                const response = await fetch('');       //wait until backend call
+                const response = await fetch('http://localhost:5000/news', {
+                    method: 'POST'
+                });       //wait until backend call
                 const data = await response.json();
 
-                if (data.status === "success" && data.results) {
-                    setNewsList(data.results);
+                if (data.status === "success" && data.articles) {
+                    setNewsList(data.articles);
                 } else {
                     console.error("API return success but no results array.");
                 }
@@ -91,7 +93,7 @@ export const NewsPage: React.FC = () => {
                         News & Updates
                     </Typography>
                     <Typography variant="body2" sx={{ color: '#C5AA8E' }}>
-                        Everything happening at Bukit
+                        Latest Malaysian News
                     </Typography>
                 </Box>
 

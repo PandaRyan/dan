@@ -30,10 +30,10 @@ app.use(express.urlencoded({extended: false}));
 
 
 // routes
-const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
+const newsRouter = require('./routes/news');
 
-app.use('/', indexRouter);
+app.use('/news', newsRouter);
 app.use('/auth', authRouter)
 
 // catch 404 and forward to error handler
