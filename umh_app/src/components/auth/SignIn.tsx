@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Box, Typography, Container, Link } from '@mui/material';
 import { ThemedTextField } from '../ThemedTextField';
-import Themedbutton from '../ThemedButton';
+import Themedbutton from '../Themedbutton';
+import { useAuth } from '../context/AuthContext';
 
 export const SignIn: React.FC = () => {
     const [formData, setFormData] = useState({
@@ -16,9 +17,32 @@ export const SignIn: React.FC = () => {
         });
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const { UserContextLogin } = useAuth();
+    
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('Logging in with:', formData);      //login api
+        
+        try {
+            const response = await fetch('http://localhost:5000/auth/signin', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+
+            const data = await response.json();
+
+            if (data.status === "success") {
+                alert("login successful!")
+                 UserContextLogin({token: data.token, name: data.name})
+            }
+            else {
+                alert("incorrect username/password")
+            }
+        } catch (err) {
+            alert(err)
+        }
     };
 
     return (
@@ -39,7 +63,7 @@ export const SignIn: React.FC = () => {
                     Welcome Back!
                 </Typography>
 
-                <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1, width: '100%' }}>
+                <Box component="form" sx={{ mt: 1, width: '100%' }}>
                     <ThemedTextField
                         name="email"
                         label="Email Address"
@@ -59,6 +83,7 @@ export const SignIn: React.FC = () => {
                         <Themedbutton
                             type="submit"
                             title="SIGN IN"
+                            onClick={handleSubmit}
                             sx={{ width: '200px', padding: '8px', fontSize: '14px' }}
                         />
                     </Box>

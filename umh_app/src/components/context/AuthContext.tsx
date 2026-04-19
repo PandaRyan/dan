@@ -18,8 +18,13 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
-export  function useAuth(){
-  return useContext(AuthContext)
+export function useAuth() {
+  const context = useContext(AuthContext)
+
+  if (context === undefined) 
+    throw new Error('useAuth must be used within AuthProvider')
+  else
+    return context
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);

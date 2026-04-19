@@ -35,7 +35,7 @@ router.post('/signup', async (req, res) => {
         //check user existence
         const userExists = await User.findOne({ email: email})
         if (userExists)
-            return res.status(400).json({status: "failed", error: "Existing account found with email"})
+            return res.status(400).json({status: "failed", message: "Existing account found with email"})
         
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
@@ -48,11 +48,11 @@ router.post('/signup', async (req, res) => {
         })
 
         const savedUser = await newUser.save();
-        res.status(201).json({status: "success", token: token})
+        res.status(201).json({status: "success", token: token, name: name})
 
 
     } catch (err) {
-        res.status(500).json({status: "failed", error: err.message})
+        res.status(500).json({status: "failed", message: err.message})
     }
 });
 

@@ -1,6 +1,7 @@
 require('dotenv').config()
 
 const createError = require('http-errors');
+const cors = require('cors');
 
 const express = require('express');
 const app = express();
@@ -18,17 +19,21 @@ const connectDB = async () => {
 }
 connectDB()
 
+app.use(cors({
+  origin: 'http://localhost:5173',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeader: ['Content-Type', 'Authorization']
+}))
+
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
 
 // routes
 const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
 const authRouter = require('./routes/auth');
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 app.use('/auth', authRouter)
 
 // catch 404 and forward to error handler
