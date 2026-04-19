@@ -5,7 +5,7 @@ import './index.css'
 import App from './App.tsx'
 import { AuthProvider } from './components/context/AuthContext.tsx'
 import { SignIn } from './components/auth/SignIn.tsx'
-import { SignUp } from './components/auth/SignUp.tsx'
+import { Onboarding, SignUp } from './components/auth/SignUp.tsx'
 
 const router = createBrowserRouter([
   {
@@ -19,6 +19,10 @@ const router = createBrowserRouter([
       {
         path: '/signup',
         element: <SignUp />
+      },
+      {
+        path: '/signup/onboarding',
+        element: <Onboarding />
       }
     ]
   }
