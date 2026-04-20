@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, Container, Link, MenuItem } from '@mui/material';
-
 import { ThemedTextField } from '../../components/ThemedTextField';
 import Themedbutton from '../../components/Themedbutton';
+import { ThemedSnackbar } from '../../components/ThemedSnackBar';
 import { useAuth } from '../../components/context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -32,6 +32,9 @@ export const SignUp: React.FC = () => {
         password: '',
     });
 
+    const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'error' as 'error' | 'success' });       //for the snackbar
+    const handleCloseSnackbar = () => setSnackbar({ ...snackbar, open: false });
+
     const { UserContextLogin } = useAuth();
     const navigate = useNavigate();
 
@@ -60,52 +63,47 @@ export const SignUp: React.FC = () => {
 
     const handleNext = async (event: React.FormEvent) => {
         event.preventDefault();
-        
-        try {
+
+        try {                               //snackbar
             if (name === '') {
-                alert('name cannot be empty')
-                return
-            }
-            else {
+                setSnackbar({ open: true, message: 'Name cannot be empty', severity: 'error' });
+                return;
+            } else {
                 signUpFormData.name = name;
             }
 
             if (!validateEmail(email)) {
-                alert('invalid email format')
-                return
-            }
-            else {
+                setSnackbar({ open: true, message: 'Invalid email format', severity: 'error' });
+                return;
+            } else {
                 signUpFormData.email = email;
             }
 
-            if (password===confirmPassword)
-                signUpFormData.password = password
-            else {
-                alert("password mismatch")
-                return
+            if (password === confirmPassword) {
+                signUpFormData.password = password;
+            } else {
+                setSnackbar({ open: true, message: 'Passwords do not match', severity: 'error' });
+                return;
             }
 
             const response = await fetch('http://localhost:5000/auth/signup', {
                 method: 'POST',
-                headers: {
-                'Content-Type': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(signUpFormData)
-            })
+            });
 
             const data = await response.json();
 
             if (data.status === "success") {
-                alert("sign up successful!")
-                await UserContextLogin({token: data.token, name: data.name})
-                navigate('/signup/onboarding')
-            }
-            else {
-                console.log(data.status)
-                alert("signup unsuccessful: "+data.message)
+                setSnackbar({ open: true, message: 'Sign up successful!', severity: 'success' });               //green
+                await UserContextLogin({ token: data.token, name: data.name });
+                navigate('/signup/onboarding');
+            } else {
+                console.log(data.status);
+                setSnackbar({ open: true, message: "Signup unsuccessful: " + data.message, severity: 'error' });            //backend error red
             }
         } catch (err) {
-            alert(err)
+            setSnackbar({ open: true, message: 'Server error. Please try again later.', severity: 'error' });
         }
     }
 
@@ -133,13 +131,13 @@ export const SignUp: React.FC = () => {
                     <ThemedTextField name="name" label="Full Name" value={name} onChange={handleSignupValueChange} />
                     <ThemedTextField name="email" label="Email Address" type="email" value={email} onChange={handleSignupValueChange} />
                     <ThemedTextField name="password" label="Password" type="password" value={password} onChange={handleSignupValueChange} />
-                    <ThemedTextField name="confirmPassword" label="Confirm Password" type="password" value = {confirmPassword} onChange={handleSignupValueChange} />
+                    <ThemedTextField name="confirmPassword" label="Confirm Password" type="password" value={confirmPassword} onChange={handleSignupValueChange} />
 
                     <Box sx={{ mt: 4, mb: 2, display: 'flex', justifyContent: 'center' }}>
                         <Themedbutton
                             type="button"
                             title="CONTINUE"
-                            onClick = {handleNext}
+                            onClick={handleNext}
                             sx={{ width: '200px', padding: '8px', fontSize: '14px' }}
                         />
                     </Box>
@@ -151,6 +149,12 @@ export const SignUp: React.FC = () => {
                     </Link>
                 </Box>
             </Box>
+            <ThemedSnackbar
+                open={snackbar.open}
+                message={snackbar.message}
+                severity={snackbar.severity}
+                onClose={handleCloseSnackbar}
+            />
         </Container>
     );
 };
@@ -170,6 +174,9 @@ export const Onboarding: React.FC = () => {
     const navigate = useNavigate();
     const [yearError, setYearError] = useState(false);
 
+    const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'error' as 'error' | 'success' });       //snackbar
+    const handleCloseSnackbar = () => setSnackbar({ ...snackbar, open: false });
+
     const handleOnboardingValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target
 
@@ -188,14 +195,16 @@ export const Onboarding: React.FC = () => {
         event.preventDefault();
         const token = localStorage.getItem('token') || '';
 
-        if (Number(birthYear) <= 2008  && Number(birthYear) > 1900)
-            onboardingFormData.birthYear = birthYear
-        else {
-            setYearError(true)
-            return
+        if (Number(birthYear) <= 2008 && Number(birthYear) > 1900) {
+            onboardingFormData.birthYear = birthYear;
+        } else {
+            setYearError(true);
+            setSnackbar({ open: true, message: 'You must be at least 18 years old to sign up.', severity: 'error' });       //18
+            return;
         }
-        onboardingFormData.incomeCategory = incomeCategory
-        onboardingFormData.state = state
+
+        onboardingFormData.incomeCategory = incomeCategory;
+        onboardingFormData.state = state;
 
         if (authUser) {
             try {
@@ -206,93 +215,94 @@ export const Onboarding: React.FC = () => {
                         'Authorization': authUser.token
                     },
                     body: JSON.stringify(onboardingFormData)
-                })
+                });
 
-                if (response.status === 201) 
-                    navigate('/')
-                
-                else {
+                if (response.status === 201) {
+                    setSnackbar({ open: true, message: 'Profile completed!', severity: 'success' });        //success green before home page
+                    setTimeout(() => {
+                        navigate('/');
+                    }, 1000);       //1 second so they see the green mesage
+                } else {
                     const errorData = await response.json();
-                    alert(errorData?.error || 'An error occurred')
+                    setSnackbar({ open: true, message: errorData?.error || 'An error occurred', severity: 'error' });
                 }
-                    
-            } catch(err) {
-                alert(err)
+
+            } catch (err) {
+                setSnackbar({ open: true, message: 'Server error. Please try again later.', severity: 'error' });
             }
-        }
-        else {
-            navigate('/signin')
+        } else {
+            navigate('/signin');
         }
     }
-
-    useEffect(() => {
-        if (!authUser) 
-            navigate('/signin')
-    })
-
     return (
-    <>
-        <Container component="main" maxWidth="sm">
-            <Box
-                sx={{
-                    marginTop: 8,
-                    marginBottom: 8,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    backgroundColor: '#FFFFFF',
-                    padding: 4,
-                    borderRadius: 2,
-                    boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.05)',
-                }}
-            >
-                <Typography component="h1" variant="h5" sx={{ color: '#6B5441', fontWeight: 'bold', mb: 2 }}>
-                    Welcome! Tell us about yourself
-                </Typography>
-
-
-                <ThemedTextField
-                    name="birthYear"
-                    label="Birth Year (e.g. 1995, minimum 18 years old)"
-                    type="text"
-                    inputMode="numeric"
-                    value={birthYear}
-                    onChange={handleOnboardingValueChange}
-                    error={yearError}
-                />
-                <ThemedTextField select name="state" label="State" value={state} onChange={handleOnboardingValueChange}>
-                    {malaysianStates.map((state) => (
-                        <MenuItem key={state} value={state}>
-                            {state}
-                        </MenuItem>
-                    ))}
-                </ThemedTextField>
-                <ThemedTextField
-                    select
-                    name="incomeCategory"
-                    label="Income Category"
-                    value={incomeCategory}
-                    onChange={handleOnboardingValueChange}
+        <>
+            <Container component="main" maxWidth="sm">
+                <Box
+                    sx={{
+                        marginTop: 8,
+                        marginBottom: 8,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        backgroundColor: '#FFFFFF',
+                        padding: 4,
+                        borderRadius: 2,
+                        boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.05)',
+                    }}
                 >
-                    {incomeCategories.map((category) => (
-                        <MenuItem key={category.value} value={category.value}>
-                            {category.label}
-                        </MenuItem>
-                    ))}
-                </ThemedTextField>
+                    <Typography component="h1" variant="h5" sx={{ color: '#6B5441', fontWeight: 'bold', mb: 2 }}>
+                        Welcome! Tell us about yourself
+                    </Typography>
 
-                <Box sx={{ mt: 4, mb: 2, display: 'flex', justifyContent: 'center', gap: 2 }}>
-                    <div>
-                        <Themedbutton
-                            type="submit"
-                            title="COMPLETE SIGN UP"
-                            sx={{ width: '220px', padding: '8px', fontSize: '14px' }}
-                            onClick = {handleSubmit}
-                        />
-                    </div>
+
+                    <ThemedTextField
+                        name="birthYear"
+                        label="Birth Year (e.g. 1995, minimum 18 years old)"
+                        type="text"
+                        inputMode="numeric"
+                        value={birthYear}
+                        onChange={handleOnboardingValueChange}
+                        error={yearError}
+                    />
+                    <ThemedTextField select name="state" label="State" value={state} onChange={handleOnboardingValueChange}>
+                        {malaysianStates.map((state) => (
+                            <MenuItem key={state} value={state}>
+                                {state}
+                            </MenuItem>
+                        ))}
+                    </ThemedTextField>
+                    <ThemedTextField
+                        select
+                        name="incomeCategory"
+                        label="Income Category"
+                        value={incomeCategory}
+                        onChange={handleOnboardingValueChange}
+                    >
+                        {incomeCategories.map((category) => (
+                            <MenuItem key={category.value} value={category.value}>
+                                {category.label}
+                            </MenuItem>
+                        ))}
+                    </ThemedTextField>
+
+                    <Box sx={{ mt: 4, mb: 2, display: 'flex', justifyContent: 'center', gap: 2 }}>
+                        <div>
+                            <Themedbutton
+                                type="submit"
+                                title="COMPLETE SIGN UP"
+                                sx={{ width: '220px', padding: '8px', fontSize: '14px' }}
+                                onClick={handleSubmit}
+                            />
+                        </div>
+                    </Box>
                 </Box>
-            </Box>
-        </Container>
-    </>
+                <ThemedSnackbar
+                    open={snackbar.open}
+                    message={snackbar.message}
+                    severity={snackbar.severity}
+                    onClose={handleCloseSnackbar}
+                />
+            </Container>
+        </>
     );
 };

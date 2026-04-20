@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Box, Typography, Container, Link } from '@mui/material';
 import { ThemedTextField } from '../../components/ThemedTextField';
 import Themedbutton from '../../components/Themedbutton';
+import { ThemedSnackbar } from '../../components/ThemedSnackBar';
 import { useAuth } from '../../components/context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -10,6 +11,16 @@ export const SignIn: React.FC = () => {
         email: '',
         password: '',
     });
+
+    const [snackbar, setSnackbar] = useState({          //for the snackbar
+        open: false,
+        message: '',
+        severity: 'error' as 'error' | 'success'
+    });
+
+    const handleCloseSnackbar = () => {                 //to close it
+        setSnackbar({ ...snackbar, open: false });
+    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({
@@ -20,35 +31,33 @@ export const SignIn: React.FC = () => {
 
     const { UserContextLogin } = useAuth();
     const navigate = useNavigate();
-    
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        
+
         try {
             const response = await fetch('http://localhost:5000/auth/signin', {
                 method: 'POST',
-                headers: {
-                'Content-Type': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)
-            })
+            });
 
             const data = await response.json();
 
             if (data.status === "success") {
-                alert("login successful!")
-                UserContextLogin({token: data.token, name: data.name})
-                
-                if (data.onboarding===false)
-                    navigate('/signup/onboarding')
-                else 
-                    navigate ('/')
-            }
-            else {
-                alert("incorrect username/password")
+                setSnackbar({ open: true, message: 'Login successful!', severity: 'success' });         //the green snackbar
+                UserContextLogin({ token: data.token, name: data.name });
+
+                if (data.onboarding === false) {
+                    navigate('/signup/onboarding');
+                } else {
+                    navigate('/');
+                }
+            } else {
+                setSnackbar({ open: true, message: 'Incorrect username or password', severity: 'error' });      //the red snackbar
             }
         } catch (err) {
-            alert(err)
+            setSnackbar({ open: true, message: 'Server error. Please try again later.', severity: 'error' });       //red but server offline
         }
     };
 
@@ -102,6 +111,12 @@ export const SignIn: React.FC = () => {
                     </Box>
                 </Box>
             </Box>
+            <ThemedSnackbar
+                open={snackbar.open}
+                message={snackbar.message}
+                severity={snackbar.severity}
+                onClose={handleCloseSnackbar}
+            />
         </Container>
     );
 };
