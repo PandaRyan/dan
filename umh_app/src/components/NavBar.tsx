@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Box, AppBar, Toolbar, Typography, CssBaseline, Stack, Menu, MenuItem, Drawer, IconButton } from "@mui/material"
-import Themedbutton from "./Themedbutton";
+import ThemedButton from "./Themedbutton";
 import bukitLogo from "../assets/images/bukit.png";
 import MenuIcon from '@mui/icons-material/Menu';
 import EducationPicture from "../assets/images/Education-UMH.jpeg"
@@ -9,17 +9,6 @@ import HealthcarePicture from "../assets/images/Healthcare-UMH.png"
 import TransportationPicture from "../assets/images/Transportation-UMH.png"
 import UtilitiesPicture from "../assets/images/Utilities-UMH.jpg"
 import OthersPicture from "../assets/images/Others-UMH.jpg"
-
-
-const Account = () => {
-  return (
-    <Themedbutton color="inherit" title="Account"></Themedbutton>
-  )
-}
-import { useState, useEffect } from "react";
-import { Box, AppBar, Toolbar, Typography, CssBaseline, Stack} from "@mui/material"
-import ThemedButton from "./Themedbutton";
-import bukitLogo from "../assets/images/bukit.png";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 
@@ -156,15 +145,15 @@ export const NavBar = () => {
             }}
           >
 
-            <Themedbutton color="inherit" title="DashBoard" id="resource-button"
+            <ThemedButton color="inherit" title="DashBoard" id="resource-button"
               onMouseEnter={handleOpen}
               onClick={handleClose}
               sx={{
                 backgroundColor: open ? '#7d9e4b' : '#6f874b'
               }}
             />
-            <Themedbutton color="inherit" title="News" />
-            <Themedbutton color="inherit" title="About" />
+            <ThemedButton color="inherit" title="News" />
+            <ThemedButton color="inherit" title="About" />
             {HasLogIn ? <Account /> : <NoAccount />}
           </Stack>
           <Menu id="resource-menu"
@@ -363,7 +352,7 @@ export const NavBar = () => {
                   }
                 }
               }}>
-                {HasLogIn ? <Account /> : <NoAccount />}
+                {!!authUser ? (<ThemedButton color="inherit" title={`Welcome Back, ${authUser.name}`} onClick={ContextLogout}/>)  : <NoAccount />} 
               </Box>
 
               <Box
@@ -384,28 +373,18 @@ export const NavBar = () => {
                   }
                 }}
               >
-                <Themedbutton color="inherit" title="Utilities" />
-                <Themedbutton color="inherit" title="Transportation" />
-                <Themedbutton color="inherit" title="Healthcare" />
-                <Themedbutton color="inherit" title="Education" />
-                <Themedbutton color="inherit" title="Groceries" />
-                <Themedbutton color="inherit" title="Others" />
-                <Themedbutton color="inherit" title="News" />
-                <Themedbutton color="inherit" title="About" />
+                <ThemedButton color="inherit" title="Utilities" />
+                <ThemedButton color="inherit" title="Transportation" />
+                <ThemedButton color="inherit" title="Healthcare" />
+                <ThemedButton color="inherit" title="Education" />
+                <ThemedButton color="inherit" title="Groceries" />
+                <ThemedButton color="inherit" title="Others" />
+                <ThemedButton color="inherit" title="News" />
+                <ThemedButton color="inherit" title="About" />
               </Box>
 
             </Drawer>
           </Box>
-             >
-              <ThemedButton color="inherit" title="Groceries" ></ThemedButton>
-              <ThemedButton color="inherit" title="Utilities" ></ThemedButton>
-              <ThemedButton color="inherit" title="Transportation" ></ThemedButton>
-              <ThemedButton color="inherit" title="Healthcare" ></ThemedButton>
-              <ThemedButton color="inherit" title="Education" ></ThemedButton>
-              <ThemedButton color="inherit" title="News" onClick={handleNewsClick} ></ThemedButton>
-              <ThemedButton color="inherit" title="About"></ThemedButton>
-              {!!authUser ? (<ThemedButton color="inherit" title={`Welcome Back, ${authUser.name}`} onClick={ContextLogout}/>)  : <NoAccount />} 
-            </Stack>  
         </Toolbar>
       </AppBar>
     </>
