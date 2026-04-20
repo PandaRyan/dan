@@ -32,6 +32,10 @@ export const NavBar = () => {
   const navigate = useNavigate();
   const { authUser, ContextLogout } = useAuth();
 
+  const handleNewsClick = () => {
+    navigate('/news');
+  }
+
   return (
     <>
     <CssBaseline />
@@ -71,7 +75,7 @@ export const NavBar = () => {
               <ThemedButton color="inherit" title="Transportation" ></ThemedButton>
               <ThemedButton color="inherit" title="Healthcare" ></ThemedButton>
               <ThemedButton color="inherit" title="Education" ></ThemedButton>
-              <ThemedButton color="inherit" title="News" ></ThemedButton>
+              <ThemedButton color="inherit" title="News" onClick={handleNewsClick} ></ThemedButton>
               <ThemedButton color="inherit" title="About"></ThemedButton>
               {!!authUser ? (<ThemedButton color="inherit" title={`Welcome Back, ${authUser.name}`} onClick={ContextLogout}/>)  : <NoAccount />} 
             </Stack>  

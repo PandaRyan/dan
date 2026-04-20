@@ -7,12 +7,17 @@ import { AuthProvider } from './components/context/AuthContext.tsx'
 import { SignIn } from './routes/auth/SignIn.tsx'
 import { Onboarding, SignUp } from './routes/auth/SignUp.tsx'
 import { NewsPage } from './routes/news/News.tsx'
+import { LandingPage } from './routes/LandingPage.tsx'
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
     children: [
+      {
+        path: '/home',
+        element: <LandingPage />
+      },
       {
         path: '/signin',
         element: <SignIn />
