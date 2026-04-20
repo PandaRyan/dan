@@ -183,8 +183,8 @@ export const NavBar = () => {
                 sx: {
                   width: '100vw',
                   maxWidth: '100vw',
-                  height: '30vw',
-                  maxHeight: '30vw',
+                  height: 'auto',
+                  maxHeight: '70vh',
                   left: '0px !important',
                   borderRadius: 0,
                   boxShadow: 'none'
@@ -208,7 +208,7 @@ export const NavBar = () => {
               <Box sx={{
                 width: '250px',
                 borderRight: '1px solid #e0e0e0',
-                py: 1
+                py: 4
               }}>
                 <MenuItem onClick={handleClose} onMouseEnter={() => setHoveredCategory('Utilities')}>Utilities</MenuItem>
                 <MenuItem onClick={handleClose} onMouseEnter={() => setHoveredCategory('Transportation')}>Transportation</MenuItem>
