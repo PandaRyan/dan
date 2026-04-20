@@ -1,15 +1,14 @@
 import './App.css'
 import { NavBar } from './components/NavBar'
-import './App.css'
+import { NewsPage } from './routes/news/News'
 import { Outlet } from 'react-router-dom'
 
 function App() {
-
   return (
     <>
-    <NavBar />
+      <NavBar />
       <main>
-        <Outlet />
+        <Outlet/>
       </main>
     </>
   )

@@ -4,8 +4,9 @@ import { createBrowserRouter, RouterProvider} from 'react-router-dom'
 import './index.css'
 import App from './App.tsx'
 import { AuthProvider } from './components/context/AuthContext.tsx'
-import { SignIn } from './components/auth/SignIn.tsx'
-import { SignUp } from './components/auth/SignUp.tsx'
+import { SignIn } from './routes/auth/SignIn.tsx'
+import { Onboarding, SignUp } from './routes/auth/SignUp.tsx'
+import { NewsPage } from './routes/news/News.tsx'
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,14 @@ const router = createBrowserRouter([
       {
         path: '/signup',
         element: <SignUp />
+      },
+      {
+        path: '/signup/onboarding',
+        element: <Onboarding />
+      },
+      {
+        path: '/news',
+        element: <NewsPage />
       }
     ]
   }

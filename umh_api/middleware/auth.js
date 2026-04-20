@@ -3,7 +3,7 @@ const User = require('../models/Users');
 const { MongoError } = require('mongodb');
 
 module.exports = async (req, res, next) => {
-    const token = req.header("authorization");
+    const token = req.header("Authorization");
     if (!token)
         return res.status(401).json({status: "failed", message: "access denied, no token"})
 

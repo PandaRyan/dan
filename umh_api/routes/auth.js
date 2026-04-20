@@ -22,10 +22,10 @@ router.post('/signin', async (req, res) => {
     const token = jwt.sign(
         { _id: user._id},
         process.env.TOKEN_SECRET,
-        { expiresIn: '3h' }
+        { expiresIn: '2h' }
     )
 
-    res.status(200).json({status: "success", token: token})
+    res.status(200).json({status: "success", token: token, name: user.name, onboarding: user.onboarding})
 });
 
 router.post('/signup', async (req, res) => {
@@ -48,6 +48,13 @@ router.post('/signup', async (req, res) => {
         })
 
         const savedUser = await newUser.save();
+
+        const token = jwt.sign(
+            { _id: savedUser._id},
+            process.env.TOKEN_SECRET,
+            { expiresIn: '2h' }
+        )
+
         res.status(201).json({status: "success", token: token, name: name})
 
 
@@ -58,14 +65,13 @@ router.post('/signup', async (req, res) => {
 
 router.post('/signup/onboarding', verify, async (req, res) => {
     try {
-        let { birthYear, state, incomeCategory } = req.body
-        let { Authorization } = req.header
+        const { birthYear, state, incomeCategory } = req.body
 
         const userProfileData = new UserProfile({
             user: req.user._id,
-            birthYear: birthYear,
-            state: state,
-            incomeCategory: incomeCategory
+            birthYear,
+            state,
+            incomeCategory
         })
 
         const savedData = await userProfileData.save();
@@ -79,6 +85,7 @@ router.post('/signup/onboarding', verify, async (req, res) => {
         res.status(201).json({status: "success"})
 
     } catch (err) {
+        console.log(err)
         res.status(500).json({status: "failed", error: err})
     }
 })

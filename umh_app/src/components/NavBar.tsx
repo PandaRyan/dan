@@ -16,10 +16,23 @@ const Account = () => {
     <Themedbutton color="inherit" title="Account"></Themedbutton>
   )
 }
+import { useState, useEffect } from "react";
+import { Box, AppBar, Toolbar, Typography, CssBaseline, Stack} from "@mui/material"
+import ThemedButton from "./Themedbutton";
+import bukitLogo from "../assets/images/bukit.png";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "./context/AuthContext";
+
 
 const NoAccount = () => {
+
+  const navigate = useNavigate();
+
+  const handleAuth = () => {
+    navigate('/signin')
+  } 
   return (
-    <Themedbutton color="inherit"
+    <ThemedButton color="inherit" 
       title="Login/SignUp"
       sx={{
         border: '1px solid white',
@@ -27,7 +40,8 @@ const NoAccount = () => {
         alignSelf: 'center',
         backgroundColor: 'transparent'
       }}
-    ></Themedbutton>
+      onClick = {handleAuth}
+    ></ThemedButton> 
   )
 }
 
@@ -97,6 +111,9 @@ export const NavBar = () => {
     setHoveredCategory(null);
   };
 
+  const[name, setName] = useState('');
+  const navigate = useNavigate();
+  const { authUser, ContextLogout } = useAuth();
 
   return (
     <>
@@ -375,6 +392,16 @@ export const NavBar = () => {
 
             </Drawer>
           </Box>
+             >
+              <ThemedButton color="inherit" title="Groceries" ></ThemedButton>
+              <ThemedButton color="inherit" title="Utilities" ></ThemedButton>
+              <ThemedButton color="inherit" title="Transportation" ></ThemedButton>
+              <ThemedButton color="inherit" title="Healthcare" ></ThemedButton>
+              <ThemedButton color="inherit" title="Education" ></ThemedButton>
+              <ThemedButton color="inherit" title="News" ></ThemedButton>
+              <ThemedButton color="inherit" title="About"></ThemedButton>
+              {!!authUser ? (<ThemedButton color="inherit" title={`Welcome Back, ${authUser.name}`} onClick={ContextLogout}/>)  : <NoAccount />} 
+            </Stack>  
         </Toolbar>
       </AppBar>
     </>
