@@ -19,9 +19,9 @@ const NoAccount = () => {
 
   const handleAuth = () => {
     navigate('/signin')
-  } 
+  }
   return (
-    <ThemedButton color="inherit" 
+    <ThemedButton color="inherit"
       title="Login/SignUp"
       sx={{
         border: '1px solid white',
@@ -29,8 +29,8 @@ const NoAccount = () => {
         alignSelf: 'center',
         backgroundColor: 'transparent'
       }}
-      onClick = {handleAuth}
-    ></ThemedButton> 
+      onClick={handleAuth}
+    ></ThemedButton>
   )
 }
 
@@ -72,7 +72,6 @@ const categoryText: Record<string, { title: string, body: string }> = {
 
 
 export const NavBar = () => {
-  const [HasLogIn, setHasLogIn] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState<null | HTMLElement>(null);
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
@@ -100,7 +99,7 @@ export const NavBar = () => {
     setHoveredCategory(null);
   };
 
-  const[name, setName] = useState('');
+  const [name, setName] = useState('');
   const navigate = useNavigate();
   const { authUser, ContextLogout } = useAuth();
 
@@ -159,9 +158,11 @@ export const NavBar = () => {
               }}
             />
             <ThemedButton color="inherit" title="News" onClick={handleNewsClick} />
-            {!!authUser ? (<ThemedButton color="inherit" title={`Welcome Back, ${authUser.name}`} onClick={ContextLogout}/>)  : <NoAccount />} 
+            {!!authUser ? (<ThemedButton color="inherit" title={`Welcome Back, ${authUser.name}`} onClick={ContextLogout} />) : <NoAccount />}
           </Stack>
-          <Menu id="resource-menu"
+
+
+          <Menu
             anchorEl={anchorEl}
             open={open}
             onClick={handleClose}
@@ -182,6 +183,8 @@ export const NavBar = () => {
                 sx: {
                   width: '100vw',
                   maxWidth: '100vw',
+                  height: '30vw',
+                  maxHeight: '30vw',
                   left: '0px !important',
                   borderRadius: 0,
                   boxShadow: 'none'
@@ -193,7 +196,7 @@ export const NavBar = () => {
               '& .MuiMenuItem-root': {
                 color: '#6C513C',
                 fontWeight: 'bold',
-                py: 5,
+                py: 2,
                 '&:hover': {
                   backgroundColor: '#e2efd9',
                   borderLeft: '10px solid #6F874B',
@@ -301,9 +304,9 @@ export const NavBar = () => {
                       src={categoryImages[hoveredCategory]}
                       alt="Category Preview"
                       sx={{
-                        width: "1200px",
+                        width: "680px",
                         maxWidth: "100%",
-                        height: "600px",
+                        height: "350px",
                         objectFit: "cover",
                         borderRadius: 2,
                       }}
@@ -314,9 +317,10 @@ export const NavBar = () => {
                       src={bukitLogo}
                       alt="Default Logo"
                       sx={{
-                        width: "1200px",
+                        width: "600px",
                         maxWidth: "100%",
-                        height: "400px",
+                        height: "350px",
+                        maxHeight: '70%',
                         objectFit: "contain",
                         borderRadius: 2,
                       }}
@@ -328,7 +332,7 @@ export const NavBar = () => {
             </Box>
           </Menu>
 
-        
+
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <IconButton color="inherit" onClick={handleOpenDrawer}>
               <MenuIcon />
@@ -360,7 +364,7 @@ export const NavBar = () => {
                   }
                 }
               }}>
-                {!!authUser ? (<ThemedButton color="inherit" title={`Welcome Back, ${authUser.name}`} onClick={ContextLogout}/>)  : <NoAccount />} 
+                {!!authUser ? (<ThemedButton color="inherit" title={`Welcome Back, ${authUser.name}`} onClick={ContextLogout} />) : <NoAccount />}
               </Box>
 
               <Box
@@ -387,7 +391,7 @@ export const NavBar = () => {
                 <ThemedButton color="inherit" title="Education" />
                 <ThemedButton color="inherit" title="Groceries" />
                 <ThemedButton color="inherit" title="Others" />
-                <ThemedButton color="inherit" title="News" onClick={handleNewsClick}/>
+                <ThemedButton color="inherit" title="News" onClick={handleNewsClick} />
               </Box>
 
             </Drawer>
