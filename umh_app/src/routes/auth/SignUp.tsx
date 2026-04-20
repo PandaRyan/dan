@@ -32,10 +32,22 @@ export const SignUp: React.FC = () => {
         password: '',
     });
 
-    const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'error' as 'error' | 'success' });       //for the snackbar
-    const handleCloseSnackbar = () => setSnackbar({ ...snackbar, open: false });
+    const [snackbarConfig, setSnackbarConfig] = useState<{open: boolean, msg: string, sev: "error" | "success" | "warning"}>({
+        open: false,
+        msg: '',
+        sev: 'success'
+    });
+    
+    const triggerLocalSnackbar = (msg: string, sev: "error" | "success" | "warning") => {
+        setSnackbarConfig({open: true, msg, sev});
+    };
 
-    const { UserContextLogin } = useAuth();
+    const handleClose = () => {
+        setSnackbarConfig((prev) => ({...prev, open:false}));
+    }
+
+
+    const { UserContextLogin, triggerSnackbar } = useAuth();
     const navigate = useNavigate();
 
     const handleSignupValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,16 +76,16 @@ export const SignUp: React.FC = () => {
     const handleNext = async (event: React.FormEvent) => {
         event.preventDefault();
 
-        try {                               //snackbar
+        try {                            
             if (name === '') {
-                setSnackbar({ open: true, message: 'Name cannot be empty', severity: 'error' });
+                triggerLocalSnackbar("Name cannot be empty", "error")
                 return;
             } else {
                 signUpFormData.name = name;
             }
 
             if (!validateEmail(email)) {
-                setSnackbar({ open: true, message: 'Invalid email format', severity: 'error' });
+                triggerLocalSnackbar("Invalid email", "error")
                 return;
             } else {
                 signUpFormData.email = email;
@@ -82,7 +94,7 @@ export const SignUp: React.FC = () => {
             if (password === confirmPassword) {
                 signUpFormData.password = password;
             } else {
-                setSnackbar({ open: true, message: 'Passwords do not match', severity: 'error' });
+                triggerLocalSnackbar("Password mismatch", "error")
                 return;
             }
 
@@ -95,15 +107,14 @@ export const SignUp: React.FC = () => {
             const data = await response.json();
 
             if (data.status === "success") {
-                setSnackbar({ open: true, message: 'Sign up successful!', severity: 'success' });               //green
+                triggerSnackbar("Signup successful!", "success")
                 await UserContextLogin({ token: data.token, name: data.name });
                 navigate('/signup/onboarding');
             } else {
-                console.log(data.status);
-                setSnackbar({ open: true, message: "Signup unsuccessful: " + data.message, severity: 'error' });            //backend error red
+                triggerLocalSnackbar("Signup unsuccessful: "+data.message, "error")
             }
         } catch (err) {
-            setSnackbar({ open: true, message: 'Server error. Please try again later.', severity: 'error' });
+            triggerLocalSnackbar("Signup unsuccessful: "+err, "error")
         }
     }
 
@@ -150,10 +161,10 @@ export const SignUp: React.FC = () => {
                 </Box>
             </Box>
             <ThemedSnackbar
-                open={snackbar.open}
-                message={snackbar.message}
-                severity={snackbar.severity}
-                onClose={handleCloseSnackbar}
+                open={snackbarConfig.open}
+                message={snackbarConfig.msg}
+                severity={snackbarConfig.sev}
+                onClose={handleClose}
             />
         </Container>
     );
@@ -170,12 +181,23 @@ export const Onboarding: React.FC = () => {
         incomeCategory: '',
     });
 
-    const { authUser, UserContextLogin } = useAuth();
+    const { authUser, triggerSnackbar } = useAuth();
     const navigate = useNavigate();
     const [yearError, setYearError] = useState(false);
 
-    const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'error' as 'error' | 'success' });       //snackbar
-    const handleCloseSnackbar = () => setSnackbar({ ...snackbar, open: false });
+    const [snackbarConfig, setSnackbarConfig] = useState<{open: boolean, msg: string, sev: "error" | "success" | "warning"}>({
+        open: false,
+        msg: '',
+        sev: 'success'
+    });
+    
+    const triggerLocalSnackbar = (msg: string, sev: "error" | "success" | "warning") => {
+        setSnackbarConfig({open: true, msg, sev});
+    };
+
+    const handleClose = () => {
+        setSnackbarConfig((prev) => ({...prev, open:false}));
+    }
 
     const handleOnboardingValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target
@@ -199,7 +221,7 @@ export const Onboarding: React.FC = () => {
             onboardingFormData.birthYear = birthYear;
         } else {
             setYearError(true);
-            setSnackbar({ open: true, message: 'You must be at least 18 years old to sign up.', severity: 'error' });       //18
+            triggerLocalSnackbar("Invalid birth year", "error")
             return;
         }
 
@@ -218,17 +240,17 @@ export const Onboarding: React.FC = () => {
                 });
 
                 if (response.status === 201) {
-                    setSnackbar({ open: true, message: 'Profile completed!', severity: 'success' });        //success green before home page
+                    triggerSnackbar("Onboarding completed!", "success")
                     setTimeout(() => {
                         navigate('/');
                     }, 1000);       //1 second so they see the green mesage
                 } else {
                     const errorData = await response.json();
-                    setSnackbar({ open: true, message: errorData?.error || 'An error occurred', severity: 'error' });
+                    triggerLocalSnackbar("Onboarding failed: "+errorData.error, "error")
                 }
 
             } catch (err) {
-                setSnackbar({ open: true, message: 'Server error. Please try again later.', severity: 'error' });
+                triggerLocalSnackbar("Server error: "+err, "error")
             }
         } else {
             navigate('/signin');
@@ -297,10 +319,10 @@ export const Onboarding: React.FC = () => {
                     </Box>
                 </Box>
                 <ThemedSnackbar
-                    open={snackbar.open}
-                    message={snackbar.message}
-                    severity={snackbar.severity}
-                    onClose={handleCloseSnackbar}
+                    open={snackbarConfig.open}
+                    message={snackbarConfig.msg}
+                    severity={snackbarConfig.sev}
+                    onClose={handleClose}
                 />
             </Container>
         </>

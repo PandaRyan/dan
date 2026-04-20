@@ -1,7 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider} from 'react-router-dom'
-import './index.css'
 import App from './App.tsx'
 import { AuthProvider } from './components/context/AuthContext.tsx'
 import { SignIn } from './routes/auth/SignIn.tsx'
@@ -15,7 +14,7 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       {
-        path: '/home',
+        index: true,
         element: <LandingPage />
       },
       {

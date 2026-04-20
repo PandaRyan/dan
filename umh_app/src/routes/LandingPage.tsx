@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography, Button, Container, Card, CardContent, Chip } from '@mui/material';
+import { Box, Typography, Button, Container, Card, CardContent } from '@mui/material';
 import { ArrowRight, Zap, GlobeLock, Flag } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import bgimageurl from '../assets/images/rampartcreek.jpg';
@@ -10,17 +10,17 @@ const features = [
   {
     title: 'Always Updated',
     description: 'We track the latest government subsidies and updates in real time, so you never miss one!',
-    icon: <Zap size={32} color="#6B7F49" />, // Olive Green
+    icon: <Zap size={32} color="#6B7F49" />, 
   },
   {
     title: 'Privacy Enforced',
     description: 'Your data stays with you. We never store your conversations, guaranteed.',
-    icon: <GlobeLock size={32} color="#6B7F49" />, // Olive Green
+    icon: <GlobeLock size={32} color="#6B7F49" />, 
   },
   {
     title: 'Malaysian Core',
     description: 'From MyKasih grocery credits to subsidized RON 95 petrol, get advice tailored to the Malaysian context.',
-    icon: <Flag size={32} color="#6B7F49" />, // Olive Green
+    icon: <Flag size={32} color="#6B7F49" />,
   },
 ];
 
@@ -30,16 +30,13 @@ export const LandingPage: React.FC = () => {
     return (
         <Box sx={{ bgcolor: '#F5F6F8', minHeight: '100vh', pb: 10, fontFamily: 'sans-serif' }}>
         
-        {/* --- HERO SECTION (Olive Green Base) --- */}
         <Box sx={{bgcolor: '#FFFFFF', position: 'relative', overflow: 'hidden'}}>
             <Box sx={{backgroundImage: `url(${bgimageurl})`, backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.9, position: 'absolute', top: 0, left: 0, width: '100%', height: '100%'}} />
             
             <Container maxWidth="lg" sx={{ pt: { xs: 8, md: 12 }, pb: 8, textAlign: 'center', position: 'relative' }}>
                 <Box sx={{ position: 'relative', zIndex: 1 }}>
-                    {/* Headline */}
                     <Typography variant="h2" sx={{ color: '#6B5441', fontWeight: 800, mb: 2, fontSize: { xs: '3rem', md: '5rem' }, letterSpacing: '-0.02em' }}>
                     Sikit-sikit, lama-lama jadi <br />
-                    {/* Gradient from Light Green to Warm Tan */}
                         <Box component="span" sx={{ 
                             background: 'linear-gradient(to right, #A9CF93, #BC9A7D)', 
                             WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' 
@@ -49,14 +46,11 @@ export const LandingPage: React.FC = () => {
                     </Typography>
                     
                     <br/>
-                    {/* Subheadline */}
                     <Typography variant="h6" sx={{ color: '#F5F6F8', opacity: 0.9, maxWidth: '800px', mx: 'auto', mb: 6, lineHeight: 1.7, fontWeight: 600 }}>
                         Gather all fragmented unclaimed subsidies introduced by the Government of Malaysia, making sure you don't miss out on any benefits!
                     </Typography>
 
-                    {/* CTAs */}
                     <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 3, justifyContent: 'center', alignItems: 'center'}}>
-                    {/* Primary Button (Off-White, Olive Text) */}
                         <Button 
                             variant="contained" size="large" endIcon={<ArrowRight size={20} />}
                             sx={{ 
@@ -67,13 +61,11 @@ export const LandingPage: React.FC = () => {
                         >
                             Get Started
                         </Button>
-                        {/* Secondary Button (Outline Light Green) */}
                     </Box>
                 </Box>
             </Container>
         </Box>
 
-        {/* --- SOCIAL PROOF (Warm Tan Base to transition into Light) --- */}
         <Box sx={{ py: 4, bgcolor: '#BC9A7D' }}>
             <Typography sx={{ textAlign: 'center', color: '#6B5441', textTransform: 'uppercase', letterSpacing: 2, fontSize: '0.875rem', mb: 3, fontWeight: 700 }}>
             Powered By
@@ -87,10 +79,11 @@ export const LandingPage: React.FC = () => {
                 src={umhackathonimageurl}
                 alt="UMHackathon Logo"
                 sx={{ 
-                    height: { xs: 30, md: 40 }, // Controls the size
-                    filter: 'grayscale(100%) brightness(0.5)', // Makes it blend with the tan background
+                    cursor: 'pointer',
+                    height: { xs: 30, md: 40 }, 
+                    filter: 'grayscale(100%) brightness(0.5)', 
                     opacity: 0.8,
-                    '&:hover': { filter: 'none', opacity: 1 } // Colors return on hover
+                    '&:hover': { filter: 'none', opacity: 1 } 
                 }}
                 onClick={() => window.open('https://umhackathon.org/', '_blank')}
                 />
@@ -100,6 +93,7 @@ export const LandingPage: React.FC = () => {
                 src={zaiimageurl}
                 alt="Z.ai Logo"
                 sx={{ 
+                    cursor: 'pointer',
                     height: { xs: 30, md: 40 }, // Controls the size
                     filter: 'grayscale(100%) brightness(0.5)', // Makes it blend with the tan background
                     opacity: 0.6,
@@ -110,7 +104,6 @@ export const LandingPage: React.FC = () => {
             </Box>
         </Box>
 
-        {/* --- FEATURES GRID (Off-White Base) --- */}
         <Container maxWidth="lg" sx={{ pt: 12, bgcolor: "#F9F7F5"}}>
             <Box sx={{ textAlign: { xs: 'center', md: 'left' }, mb: 8 }}>
             <Typography variant="h3" sx={{ color: '#6D553F', fontWeight: 800, mb: 2 }}>Built for the long climb.</Typography>
@@ -125,16 +118,14 @@ export const LandingPage: React.FC = () => {
                 '&:hover': { transform: 'translateY(-5px)', boxShadow: '0 10px 30px rgba(107, 127, 73, 0.1)' }
                 }}>
                     <CardContent sx={{ p: 5 }}>
-                        {/* Icon Wrapper (Light Olive Tint) */}
                         <Box sx={{ bgcolor: 'rgba(107, 127, 73, 0.1)', width: 64, height: 64, borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 3 }}>
-                        {feature.icon}
+                            {feature.icon}
                         </Box>
-                        {/* Text uses Deep Cocoa */}
                         <Typography variant="h5" sx={{ color: '#6D553F', fontWeight: 700, mb: 2 }}>
-                        {feature.title}
+                            {feature.title}
                         </Typography>
                         <Typography sx={{ color: '#6D553F', opacity: 0.8, lineHeight: 1.7 }}>
-                        {feature.description}
+                            {feature.description}
                         </Typography>
                     </CardContent>
                 </Card>

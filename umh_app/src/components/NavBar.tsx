@@ -108,6 +108,10 @@ export const NavBar = () => {
     navigate('/news');
   }
 
+  const handleLogoClick = () => {
+    navigate('/');
+  }
+
   return (
     <>
       <CssBaseline />
@@ -129,11 +133,13 @@ export const NavBar = () => {
               src={bukitLogo}
               alt="Bukit Logo"
               sx={{
+                cursor: 'pointer',
                 height: 70,
                 width: 'auto',
                 my: 'auto',
                 display: 'flex',
               }}
+              onClick={handleLogoClick}
             />
           </Typography>
           <Stack direction="row" spacing={2}
@@ -145,16 +151,15 @@ export const NavBar = () => {
             }}
           >
 
-            <ThemedButton color="inherit" title="DashBoard" id="resource-button"
+            <ThemedButton color="inherit" title="Dashboard"
               onMouseEnter={handleOpen}
               onClick={handleClose}
               sx={{
                 backgroundColor: open ? '#7d9e4b' : '#6f874b'
               }}
             />
-            <ThemedButton color="inherit" title="News" />
-            <ThemedButton color="inherit" title="About" />
-            {HasLogIn ? <Account /> : <NoAccount />}
+            <ThemedButton color="inherit" title="News" onClick={handleNewsClick} />
+            {!!authUser ? (<ThemedButton color="inherit" title={`Welcome Back, ${authUser.name}`} onClick={ContextLogout}/>)  : <NoAccount />} 
           </Stack>
           <Menu id="resource-menu"
             anchorEl={anchorEl}
@@ -315,12 +320,15 @@ export const NavBar = () => {
                         objectFit: "contain",
                         borderRadius: 2,
                       }}
+                      onClick={handleLogoClick}
                     />
                   )}
                 </Box>
               </Box>
             </Box>
           </Menu>
+
+        
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <IconButton color="inherit" onClick={handleOpenDrawer}>
               <MenuIcon />
@@ -379,8 +387,7 @@ export const NavBar = () => {
                 <ThemedButton color="inherit" title="Education" />
                 <ThemedButton color="inherit" title="Groceries" />
                 <ThemedButton color="inherit" title="Others" />
-                <ThemedButton color="inherit" title="News" />
-                <ThemedButton color="inherit" title="About" />
+                <ThemedButton color="inherit" title="News" onClick={handleNewsClick}/>
               </Box>
 
             </Drawer>

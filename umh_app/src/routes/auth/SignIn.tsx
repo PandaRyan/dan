@@ -12,15 +12,19 @@ export const SignIn: React.FC = () => {
         password: '',
     });
 
-    const [snackbar, setSnackbar] = useState({          //for the snackbar
+    const [snackbarConfig, setSnackbarConfig] = useState<{open: boolean, msg: string, sev: "error" | "success" | "warning"}>({
         open: false,
-        message: '',
-        severity: 'error' as 'error' | 'success'
+        msg: '',
+        sev: 'success'
     });
-
-    const handleCloseSnackbar = () => {                 //to close it
-        setSnackbar({ ...snackbar, open: false });
+  
+    const triggerLocalSnackbar = (msg: string, sev: "error" | "success" | "warning") => {
+        setSnackbarConfig({open: true, msg, sev});
     };
+
+    const handleClose = () => {
+        setSnackbarConfig((prev) => ({...prev, open:false}));
+    }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({
@@ -29,7 +33,7 @@ export const SignIn: React.FC = () => {
         });
     };
 
-    const { UserContextLogin } = useAuth();
+    const { UserContextLogin, triggerSnackbar } = useAuth();
     const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -45,7 +49,7 @@ export const SignIn: React.FC = () => {
             const data = await response.json();
 
             if (data.status === "success") {
-                setSnackbar({ open: true, message: 'Login successful!', severity: 'success' });         //the green snackbar
+                triggerSnackbar("Signin Successful!", "success");
                 UserContextLogin({ token: data.token, name: data.name });
 
                 if (data.onboarding === false) {
@@ -54,10 +58,10 @@ export const SignIn: React.FC = () => {
                     navigate('/');
                 }
             } else {
-                setSnackbar({ open: true, message: 'Incorrect username or password', severity: 'error' });      //the red snackbar
+                triggerLocalSnackbar("Incorrect email or password.", "error")
             }
         } catch (err) {
-            setSnackbar({ open: true, message: 'Server error. Please try again later.', severity: 'error' });       //red but server offline
+            triggerLocalSnackbar("Server error", "error")
         }
     };
 
@@ -112,10 +116,10 @@ export const SignIn: React.FC = () => {
                 </Box>
             </Box>
             <ThemedSnackbar
-                open={snackbar.open}
-                message={snackbar.message}
-                severity={snackbar.severity}
-                onClose={handleCloseSnackbar}
+                open={snackbarConfig.open}
+                message={snackbarConfig.msg}
+                severity={snackbarConfig.sev}
+                onClose={handleClose}
             />
         </Container>
     );
