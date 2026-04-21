@@ -119,7 +119,7 @@ export const NavBar = () => {
   return (
     <>
       <CssBaseline />
-      <AppBar position="static"
+      <AppBar position="sticky"
         sx={{
           backgroundColor: '#6F874B',
           color: '#F0F0F2'
