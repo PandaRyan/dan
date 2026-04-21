@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState} from "react";
 import { Box, AppBar, Toolbar, Typography, CssBaseline, Stack, Menu, MenuItem, Drawer, IconButton } from "@mui/material"
 import ThemedButton from "./Themedbutton";
 import bukitLogo from "../assets/images/bukit.png";
@@ -75,6 +75,7 @@ export const NavBar = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState<null | HTMLElement>(null);
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
+  const { authUser, ContextLogout } = useAuth();
 
   const handleOpenDrawer = (event: React.MouseEvent<HTMLElement>) => {
     setIsDrawerOpen(event.currentTarget);
@@ -99,9 +100,9 @@ export const NavBar = () => {
     setHoveredCategory(null);
   };
 
-  const [name, setName] = useState('');
+ 
   const navigate = useNavigate();
-  const { authUser, ContextLogout } = useAuth();
+
 
   const handleNewsClick = () => {
     navigate('/news');
@@ -120,7 +121,10 @@ export const NavBar = () => {
           color: '#F0F0F2'
         }}
       >
-        <Toolbar >
+        <Toolbar sx={{ 
+          px: 2, 
+          height: 70 
+        }}>
           <Typography variant="h6"
             component='div'
             sx={{
