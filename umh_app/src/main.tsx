@@ -7,6 +7,7 @@ import { SignIn } from './routes/auth/SignIn.tsx'
 import { Onboarding, SignUp } from './routes/auth/SignUp.tsx'
 import { NewsPage } from './routes/news/News.tsx'
 import { LandingPage } from './routes/LandingPage.tsx'
+import { Dashboard } from './routes/Dashboard.tsx'
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
       {
         path: '/news',
         element: <NewsPage />
+      },
+      {
+        path: '/dashboard',
+        element: <Dashboard />
       }
     ]
   }

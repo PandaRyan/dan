@@ -1,4 +1,4 @@
-import { useState} from "react";
+import { useState } from "react";
 import { Box, AppBar, Toolbar, Typography, CssBaseline, Stack, Menu, MenuItem, Drawer, IconButton } from "@mui/material"
 import ThemedButton from "./Themedbutton";
 import bukitLogo from "../assets/images/bukit.png";
@@ -100,7 +100,7 @@ export const NavBar = () => {
     setHoveredCategory(null);
   };
 
- 
+
   const navigate = useNavigate();
 
 
@@ -112,18 +112,22 @@ export const NavBar = () => {
     navigate('/');
   }
 
+  const handleDashboardClick = () => {
+    navigate('/dashboard');
+  }
+
   return (
     <>
       <CssBaseline />
-      <AppBar position="static"
+      <AppBar position="sticky"
         sx={{
           backgroundColor: '#6F874B',
           color: '#F0F0F2'
         }}
       >
-        <Toolbar sx={{ 
-          px: 2, 
-          height: 70 
+        <Toolbar sx={{
+          px: 2,
+          height: 70
         }}>
           <Typography variant="h6"
             component='div'
@@ -156,12 +160,18 @@ export const NavBar = () => {
 
             <ThemedButton color="inherit" title="Dashboard"
               onMouseEnter={handleOpen}
-              onClick={handleClose}
+              onClick={() => {
+                handleClose();
+                handleDashboardClick();
+              }}
               sx={{
                 backgroundColor: open ? '#7d9e4b' : '#6f874b'
               }}
             />
-            <ThemedButton color="inherit" title="News" onClick={handleNewsClick} />
+            <ThemedButton color="inherit" title="News" onClick={() => {
+              handleClose();
+              handleNewsClick();
+            }} />
             {!!authUser ? (<ThemedButton color="inherit" title={`Welcome Back, ${authUser.name}`} onClick={ContextLogout} />) : <NoAccount />}
           </Stack>
 
@@ -170,33 +180,8 @@ export const NavBar = () => {
             anchorEl={anchorEl}
             open={open}
             onClick={handleClose}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'left',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'left',
-            }}
-            slotProps={{
-              list: {
-                onMouseLeave: handleClose,
-                sx: { padding: 0 }
-              },
-              paper: {
-                sx: {
-                  width: '100vw',
-                  maxWidth: '100vw',
-                  height: 'auto',
-                  maxHeight: '70vh',
-                  left: '0px !important',
-                  borderRadius: 0,
-                  boxShadow: 'none'
-                }
-              }
-
-            }}
             sx={{
+              pointerEvents: 'none',
               '& .MuiMenuItem-root': {
                 color: '#6C513C',
                 fontWeight: 'bold',
@@ -205,6 +190,24 @@ export const NavBar = () => {
                   backgroundColor: '#e2efd9',
                   borderLeft: '10px solid #6F874B',
                 },
+              }
+            }}
+            slotProps={{
+              list: {
+                onMouseLeave: handleClose,
+                sx: { padding: 0 }
+              },
+              paper: {
+                sx: {
+                  pointerEvents: 'auto',
+                  width: '100vw',
+                  maxWidth: '100vw',
+                  height: 'auto',
+                  maxHeight: '70vh',
+                  left: '0px !important',
+                  borderRadius: 0,
+                  boxShadow: 'none'
+                }
               }
             }}
           >
