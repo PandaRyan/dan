@@ -64,7 +64,7 @@ export const NewsPage: React.FC = () => {
     useEffect(() => {       //use when page loads
         const fetchNews = async () => {     //fetch when page loads
             try {
-                const response = await fetch('http://localhost:5000/news', {
+                const response = await fetch('api/news', {
                     method: 'POST'
                 });       //wait until backend call
                 const data = await response.json();

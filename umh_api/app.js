@@ -34,9 +34,9 @@ const authRouter = require('./routes/auth');
 const newsRouter = require('./routes/news');
 const subsidyRouter = require('./routes/subsidy');
 
-app.use('/news', newsRouter);
-app.use('/auth', authRouter)
-app.use('/subsidy', subsidyRouter);
+app.use('/api/news', newsRouter);
+app.use('/api/auth', authRouter)
+app.use('/api/subsidy', subsidyRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
