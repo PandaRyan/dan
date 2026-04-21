@@ -172,7 +172,7 @@ export const NavBar = () => {
               handleClose();
               handleNewsClick();
             }} />
-            {!!authUser ? (<ThemedButton color="inherit" title={`Welcome Back, ${authUser.name}`} onClick={ContextLogout} />) : <NoAccount />}
+            {authUser ? (<ThemedButton color="inherit" title={`Welcome Back, ${authUser.name}`} onClick={ContextLogout} />) : <NoAccount />}
           </Stack>
 
 
@@ -371,7 +371,7 @@ export const NavBar = () => {
                   }
                 }
               }}>
-                {!!authUser ? (<ThemedButton color="inherit" title={`Welcome Back, ${authUser.name}`} onClick={ContextLogout} />) : <NoAccount />}
+                {authUser ? (<ThemedButton color="inherit" title={`Welcome Back, ${authUser.name}`} onClick={ContextLogout} />) : <NoAccount />}
               </Box>
 
               <Box

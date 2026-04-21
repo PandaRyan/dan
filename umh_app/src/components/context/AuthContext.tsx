@@ -22,14 +22,13 @@ interface AuthProviderProps {
 
 export function useAuth() {
   const context = useContext(AuthContext)
-
   if (context === undefined) 
     throw new Error('useAuth must be used within AuthProvider')
   else
     return context
 }
 
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [authUser, setAuthUser] = useState<User | null>(null);

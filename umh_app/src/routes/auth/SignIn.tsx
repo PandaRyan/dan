@@ -61,7 +61,7 @@ export const SignIn: React.FC = () => {
                 triggerLocalSnackbar("Incorrect email or password.", "error")
             }
         } catch (err) {
-            triggerLocalSnackbar("Server error", "error")
+            triggerLocalSnackbar("Server error" + err, "error")
         }
     };
 
