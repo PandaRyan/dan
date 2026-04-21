@@ -8,6 +8,11 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    
+    # NEW: This tells GitHub to run all 'run' commands inside the React folder
+    defaults:
+      run:
+        working-directory: ./umh_app
 
     steps:
       - name: Checkout repository
@@ -17,12 +22,21 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '24'
-          cache: 'npm' 
+          # We also have to tell the cache exactly where to look for the lock file
+          cache: 'npm'
+          cache-dependency-path: './umh_app/package-lock.json'
       
-      - run: npm ci
-      - run: npm run lint
-      - run: npm run coverage
-      - run: npm run build
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Linter (Code Quality)
+        run: npm run lint
+
+      - name: Run Unit Tests & Coverage
+        run: npm run coverage
+
+      - name: Build Project
+        run: npm run build
 
        
     
