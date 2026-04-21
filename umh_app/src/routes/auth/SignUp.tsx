@@ -25,7 +25,7 @@ export const SignUp: React.FC = () => {
     const [password, setPassword] = useState<string>('');
     const [confirmPassword, setConfirmPassword] = useState<string>('');
 
-    const [signUpFormData, setSignUpFormData] = useState({
+    const [signUpFormData] = useState({
         name: '',
         email: '',
         password: '',
@@ -174,7 +174,7 @@ export const Onboarding: React.FC = () => {
     const [state, setState] = useState<string>('');
     const [incomeCategory, setIncomeCategory] = useState<string>('');
 
-    const [onboardingFormData, setOnboardingFormData] = useState({
+    const [onboardingFormData] = useState({
         birthYear: '',
         state: '',
         incomeCategory: '',

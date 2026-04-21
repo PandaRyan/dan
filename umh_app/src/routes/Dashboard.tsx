@@ -69,7 +69,7 @@ interface ThemedGrid extends GridProps {
 }
 
 
-const ThemedGrid = ({ title, sx, onClick, ...props }: ThemedGrid) => {
+const ThemedGrid = ({ title, onClick}: ThemedGrid) => {
   return (
     <>
       <Box
