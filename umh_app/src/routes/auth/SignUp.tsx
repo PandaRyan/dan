@@ -97,7 +97,7 @@ export const SignUp: React.FC = () => {
                 return;
             }
 
-            const response = await fetch('http://localhost:5000/auth/signup', {
+            const response = await fetch('api/auth/signup', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(signUpFormData)
@@ -228,7 +228,7 @@ export const Onboarding: React.FC = () => {
 
         if (authUser) {
             try {
-                const response = await fetch('http://localhost:5000/auth/signup/onboarding', {
+                const response = await fetch('api/auth/signup/onboarding', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
