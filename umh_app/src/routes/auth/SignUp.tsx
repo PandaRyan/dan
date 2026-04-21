@@ -25,7 +25,7 @@ export const SignUp: React.FC = () => {
     const [password, setPassword] = useState<string>('');
     const [confirmPassword, setConfirmPassword] = useState<string>('');
 
-    const [signUpFormData] = useState({
+    const [signUpFormData, setSignUpFormData] = useState({
         name: '',
         email: '',
         password: '',
@@ -80,18 +80,19 @@ export const SignUp: React.FC = () => {
                 triggerLocalSnackbar("Name cannot be empty", "error")
                 return;
             } else {
-                signUpFormData.name = name;
+                setSignUpFormData({...signUpFormData, name});
+
             }
 
             if (!validateEmail(email)) {
                 triggerLocalSnackbar("Invalid email", "error")
                 return;
             } else {
-                signUpFormData.email = email;
+                setSignUpFormData({...signUpFormData, email});
             }
 
             if (password === confirmPassword) {
-                signUpFormData.password = password;
+                setSignUpFormData({...signUpFormData, password});
             } else {
                 triggerLocalSnackbar("Password mismatch", "error")
                 return;
@@ -174,7 +175,7 @@ export const Onboarding: React.FC = () => {
     const [state, setState] = useState<string>('');
     const [incomeCategory, setIncomeCategory] = useState<string>('');
 
-    const [onboardingFormData] = useState({
+    const [onboardingFormData, setOnboardingFormData] = useState({
         birthYear: '',
         state: '',
         incomeCategory: '',
@@ -216,15 +217,15 @@ export const Onboarding: React.FC = () => {
         event.preventDefault();
 
         if (Number(birthYear) <= 2008 && Number(birthYear) > 1900) {
-            onboardingFormData.birthYear = birthYear;
+            setOnboardingFormData({...onboardingFormData, birthYear});
         } else {
             setYearError(true);
             triggerLocalSnackbar("Invalid birth year", "error")
             return;
         }
 
-        onboardingFormData.incomeCategory = incomeCategory;
-        onboardingFormData.state = state;
+        setOnboardingFormData({...onboardingFormData, incomeCategory});
+        setOnboardingFormData({...onboardingFormData, state});
 
         if (authUser) {
             try {
