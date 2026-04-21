@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/umh_api/index.js" },
+    { "source": "/(.*)", "destination": "/umh_app/index.html" }
+  ]
+}
