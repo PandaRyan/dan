@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Box, Typography, Container, Link, MenuItem } from '@mui/material';
 import { ThemedTextField } from '../../components/ThemedTextField';
 import Themedbutton from '../../components/Themedbutton';
@@ -20,7 +20,6 @@ const malaysianStates = [
 
 
 export const SignUp: React.FC = () => {
-    const [step, setStep] = useState(1);    //track the state
     const [name, setName] = useState<string>('');
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
@@ -215,7 +214,6 @@ export const Onboarding: React.FC = () => {
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-        const token = localStorage.getItem('token') || '';
 
         if (Number(birthYear) <= 2008 && Number(birthYear) > 1900) {
             onboardingFormData.birthYear = birthYear;
