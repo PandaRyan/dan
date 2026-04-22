@@ -33,7 +33,8 @@ jobs:
         env: # <--- THIS IS THE NEW PART
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
-          npm run start 
+          npm run start &
+          npx wait-on http://localhost:5000/api/health
       # We download the official k6 testing software directly onto the GitHub server
       - name: Install k6
         run: |
