@@ -215,7 +215,7 @@ export const Onboarding: React.FC = () => {
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-
+        alert("Submitting onboarding data: "+birthYear+ state+ incomeCategory)
         if (Number(birthYear) <= 2008 && Number(birthYear) > 1900) {
             setOnboardingFormData(prev => ({...prev, birthYear}));
             alert(onboardingFormData.birthYear)
@@ -245,7 +245,7 @@ export const Onboarding: React.FC = () => {
 
         if (authUser) {
             try {
-                const response = await fetch('api/auth/signup/onboarding', {
+                const response = await fetch('/api/auth/signup/onboarding', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
