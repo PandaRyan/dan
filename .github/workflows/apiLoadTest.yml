@@ -30,10 +30,11 @@ jobs:
       # 1. We start the server and use '&' to force it into the background
       # 2. We use 'wait-on' to pause the workflow until the server is actually awake
       - name: Start Express Server in Background
+        env: # <--- THIS IS THE NEW PART
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
           npm run start & 
           npx wait-on http://localhost:3000/api/health
-
       # We download the official k6 testing software directly onto the GitHub server
       - name: Install k6
         run: |
