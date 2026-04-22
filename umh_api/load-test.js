@@ -12,7 +12,7 @@ export const options = {
     http_req_failed: ['rate<0.01'],   
   },
 };
-
+//retest
 export default function () {
   // Replace this URL with an actual endpoint you create in your Express app
   // (e.g., a simple health check or a database fetch route)
