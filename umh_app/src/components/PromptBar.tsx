@@ -1,6 +1,5 @@
-import { AppBar, Toolbar, Typography, TextField, Button, Box, IconButton, } from '@mui/material';
+import { AppBar, Toolbar, TextField, Box, IconButton, } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
-import AttachFileIcon from '@mui/icons-material/AttachFile';
 
 export const PromptBar = () => {
   return (
