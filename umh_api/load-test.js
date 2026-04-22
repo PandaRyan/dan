@@ -1,27 +1,41 @@
 import http from 'k6/http';
 import { sleep, check } from 'k6';
 
-// This is where we strictly enforce your CI/CD table requirements!
 export const options = {
-  vus: 50,           // Simulate 50 virtual users hitting the API at the exact same time
-  duration: '10s',   // Blast the API continuously for 10 seconds
+  vus: 50,           
+  duration: '10s',   
   thresholds: {
-    // The magic rule: 95% of all requests MUST finish in under 800 milliseconds
     http_req_duration: ['p(95)<800'], 
-    // Another good rule: Less than 1% of requests are allowed to fail
     http_req_failed: ['rate<0.01'],   
   },
 };
-//retest
+
 export default function () {
-  // Replace this URL with an actual endpoint you create in your Express app
-  // (e.g., a simple health check or a database fetch route)
-  const res = http.get('http://localhost:5000/api/auth/signin'); 
-  
-  // Optional: Check that the server actually responded with a 200 OK status
-  check(res, {
-    'is status 200': (r) => r.status === 200,
+  const url = 'http://localhost:5000/api/auth/signin'; // Ensure this matches your launched server port!
+
+  // 1. You MUST provide the exact JSON structure your auth route expects.
+  // Replace these with a real username/email and password that actually exists in your database.
+  const payload = JSON.stringify({
+    email: 'testuser@example.com', 
+    password: 'password123',
   });
 
-  sleep(1); // Small pause between simulated user clicks
+  // 2. You MUST tell Express that you are sending JSON data, otherwise req.body will be empty!
+  const params = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  // 3. Notice we changed http.get() to http.post()
+  const res = http.post(url, payload, params); 
+  
+  // 4. Check if the login was actually successful
+  check(res, {
+    'is status 200 (Login Success)': (r) => r.status === 200,
+    // Optional: If your server sends a token back, you can verify it isn't crashing by checking for a 500 error instead
+    // 'did not crash': (r) => r.status !== 500, 
+  });
+
+  sleep(1); 
 }
