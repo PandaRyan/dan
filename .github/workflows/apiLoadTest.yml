@@ -1,0 +1,46 @@
+name: API Load Test
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  performance-check:
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: ./umh_api # Keep everything focused on the backend folder
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+          cache-dependency-path: './umh_api/package-lock.json'
+      
+      - name: Install dependencies
+        run: npm ci
+
+      # 1. We start the server and use '&' to force it into the background
+      # 2. We use 'wait-on' to pause the workflow until the server is actually awake
+      - name: Start Express Server in Background
+        run: |
+          npm run start & 
+          npx wait-on http://localhost:3000/api/health
+
+      # We download the official k6 testing software directly onto the GitHub server
+      - name: Install k6
+        run: |
+          sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
+          echo "deb https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+          sudo apt-get update && sudo apt-get install k6
+
+      # Finally, we run the script we wrote in Step 1!
+      - name: Run k6 Load Test
+        run: k6 run load-test.js
