@@ -217,7 +217,8 @@ export const Onboarding: React.FC = () => {
         event.preventDefault();
 
         if (Number(birthYear) <= 2008 && Number(birthYear) > 1900) {
-            setOnboardingFormData({...onboardingFormData, birthYear});
+            setOnboardingFormData(prev => ({...prev, birthYear}));
+            alert(onboardingFormData.birthYear)
         } else {
             setYearError(true);
             triggerLocalSnackbar("Invalid birth year", "error")
@@ -229,7 +230,8 @@ export const Onboarding: React.FC = () => {
             return;
         }
         else {
-            setOnboardingFormData({...onboardingFormData, state});
+            setOnboardingFormData(prev => ({...prev, state}));
+            alert(onboardingFormData.state)
         }
 
         if (incomeCategory === '') {
@@ -237,7 +239,8 @@ export const Onboarding: React.FC = () => {
             return;
         }
         else {
-            setOnboardingFormData({...onboardingFormData, incomeCategory});
+            setOnboardingFormData(prev => ({...prev, incomeCategory}));
+            alert(onboardingFormData.incomeCategory)
         }
 
         if (authUser) {
