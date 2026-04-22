@@ -224,8 +224,21 @@ export const Onboarding: React.FC = () => {
             return;
         }
 
-        setOnboardingFormData({...onboardingFormData, incomeCategory});
-        setOnboardingFormData({...onboardingFormData, state});
+        if (state === '') {
+            triggerLocalSnackbar("Please select a state", "error")
+            return;
+        }
+        else {
+            setOnboardingFormData({...onboardingFormData, state});
+        }
+
+        if (incomeCategory === '') {
+            triggerLocalSnackbar("Please select an income category", "error")
+            return;
+        }
+        else {
+            setOnboardingFormData({...onboardingFormData, incomeCategory});
+        }
 
         if (authUser) {
             try {
