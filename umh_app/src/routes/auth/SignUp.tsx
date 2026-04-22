@@ -91,7 +91,7 @@ export const SignUp: React.FC = () => {
                 setSignUpFormData({...signUpFormData, email});
             }
 
-            if (password === confirmPassword) {
+            if (password === confirmPassword && password!== '') {
                 setSignUpFormData({...signUpFormData, password});
             } else {
                 triggerLocalSnackbar("Password mismatch", "error")
