@@ -29,7 +29,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
 //route for stress test
-app.get('/api/health', (req, res) => {
+app.get('/api/auth', (req, res) => {
   res.status(200).json({ status: 'ok', message: 'Server is running perfectly' });
 });
 
