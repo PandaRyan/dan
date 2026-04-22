@@ -16,7 +16,7 @@ export const options = {
 export default function () {
   // Replace this URL with an actual endpoint you create in your Express app
   // (e.g., a simple health check or a database fetch route)
-  const res = http.get('http://localhost:3000/api/health'); 
+  const res = http.get('http://localhost:5000/api/health'); 
   
   // Optional: Check that the server actually responded with a 200 OK status
   check(res, {
