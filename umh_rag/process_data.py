@@ -1,10 +1,12 @@
 import os
 import sys
 import chromadb
+import chromadb.utils.embedding_functions as embedding_functions
 import uuid
 from pathlib import Path
 import argparse
 from dotenv import load_dotenv
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
 
 load_dotenv()
 
@@ -14,13 +16,19 @@ CHROMA_TENANT = os.environ.get("CHROMA_TENANT")
 CHROMA_DATABASE = os.environ.get("CHROMA_DATABASE")
 COLLECTION_NAME = "malaysia_subsidy_2026"
 
+GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
+
+
+google_ef = embedding_functions.GoogleGenerativeAiEmbeddingFunction(
+    api_key=GOOGLE_API_KEY,
+    task_type="RETRIEVAL_DOCUMENT"
+)
 
 #chroma cloud client
 def get_chroma_client() -> chromadb.CloudClient:
     if not CHROMA_API_KEY:
         sys.exit(
-            "ERROR: CHROMA_API_KEY not set.\n"
-            "Export it with:  export CHROMA_API_KEY=ck-your-key"
+            "ERROR: CHROMA_API_KEY not set."
         )
     return chromadb.CloudClient(
         api_key=CHROMA_API_KEY,
@@ -34,6 +42,7 @@ def get_collection(client: chromadb.CloudClient):
     return client.get_or_create_collection(
         name=COLLECTION_NAME,
         metadata={"hnsw:space": "cosine"},   # cosine similarity
+        embedding_function=google_ef
     )
 
 #chunking

@@ -3,12 +3,12 @@ var express = require('express');
 var router = express.Router();
 require('dotenv').config();
 
-const { CloudClient } = require('chromadb');
-const { DefaultEmbeddingFunction } = require('@chroma-core/default-embed')
+const { CloudClient, GoogleGenerativeAIEmbeddings } = require('chromadb');
 const CHROMA_TENANT = process.env.CHROMA_TENANT
 const CHROMA_DATABASE = process.env.CHROMA_DATABASE
 const COLLECTION_NAME = process.env.COLLECTION_NAME
 const CHROMA_API_KEY = process.env.CHROMA_API_KEY
+const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY
 const TOP_K = 5;
 
 //chroma client
@@ -20,7 +20,7 @@ const chroma = new CloudClient({
 
 async function retrieveContext(question) {
     try {
-        const embedder = new DefaultEmbeddingFunction();
+        const embedder = new GoogleGenerativeAIEmbeddings({ api_key: GOOGLE_API_KEY });
         const collection = await chroma.getCollection({ name: COLLECTION_NAME, embeddingFunction: embedder})
         const results = await collection.query({
             queryTexts: [question],
