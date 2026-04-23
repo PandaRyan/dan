@@ -3,7 +3,8 @@ var express = require('express');
 var router = express.Router();
 require('dotenv').config();
 
-const { CloudClient, GoogleGenerativeAIEmbeddings } = require('chromadb');
+const { CloudClient } = require('chromadb');
+const { GoogleGeminiEmbeddingFunction } = require('@chroma-core/google-gemini')
 const CHROMA_TENANT = process.env.CHROMA_TENANT
 const CHROMA_DATABASE = process.env.CHROMA_DATABASE
 const COLLECTION_NAME = process.env.COLLECTION_NAME
@@ -20,7 +21,7 @@ const chroma = new CloudClient({
 
 async function retrieveContext(question) {
     try {
-        const embedder = new GoogleGenerativeAIEmbeddings({ api_key: GOOGLE_API_KEY });
+        const embedder = new GoogleGeminiEmbeddingFunction({ api_key: GOOGLE_API_KEY });
         const collection = await chroma.getCollection({ name: COLLECTION_NAME, embeddingFunction: embedder})
         const results = await collection.query({
             queryTexts: [question],
@@ -85,7 +86,7 @@ router.post('/groceries', async(req, res) => {
                     If there is no relevant subsidy available for the user's situation, respond with "I'm sorry, but there is no relevant subsidy information available for your query."
                     You will be supplied with context retrieved from the Malaysia Budget 2026 document, which may include information about various subsidies. Your answers should always include the following: Name of the subsidy, a brief description (that includes eligibility criteria and how it relates to the user's situation.)
                     Depending on the level of context available from the Malaysia Budget 2026 document, you are required to meet all criterias as described above, thus, do further research if necessary. However, it is important to NOT provide any made up or assumed information.
-                    You will also be supplied with the user's simple profile, which includes their age, income group (B40, M40, T20), and state of residence. Use this information to determine whether they are eligible for the subsidies you recommend.
+                    You will also be supplied with the user's simple profile, which includes their age, income group (B40, M40, T20), and state of residence. Use this information to determine whether they are eligible for the subsidies you recommend. By default, assume that the user is a consumer, unless otherwise stated in their question.
 
                     You are to strictly respond in a JSON format as follows:
                     {

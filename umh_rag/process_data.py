@@ -19,7 +19,7 @@ COLLECTION_NAME = "malaysia_subsidy_2026"
 GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
 
 
-google_ef = embedding_functions.GoogleGenerativeAiEmbeddingFunction(
+google_ef = embedding_functions.GoogleGenerativeAIEmbeddingFunction(
     api_key=GOOGLE_API_KEY,
     task_type="RETRIEVAL_DOCUMENT"
 )
