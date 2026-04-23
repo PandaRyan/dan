@@ -50,7 +50,16 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:5000/api/chat/test
+POST http://localhost:5000/api/chat/groceries
 Content-Type: application/json
+
+{
+    "usermsg": "I want to buy bread, what subsidy can i get?"
+}
+
+###
+
+POST http://localhost:5000/api/chat/test
+Content-Type: application/application/json
 
 {}
