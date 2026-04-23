@@ -91,7 +91,7 @@ export const SignUp: React.FC = () => {
                 setSignUpFormData({...signUpFormData, email});
             }
 
-            if (password === confirmPassword) {
+            if (password === confirmPassword && password!== '') {
                 setSignUpFormData({...signUpFormData, password});
             } else {
                 triggerLocalSnackbar("Password mismatch", "error")
@@ -215,21 +215,37 @@ export const Onboarding: React.FC = () => {
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-
+        alert("Submitting onboarding data: "+birthYear+ state+ incomeCategory)
         if (Number(birthYear) <= 2008 && Number(birthYear) > 1900) {
-            setOnboardingFormData({...onboardingFormData, birthYear});
+            setOnboardingFormData(prev => ({...prev, birthYear}));
+            alert(onboardingFormData.birthYear)
         } else {
             setYearError(true);
             triggerLocalSnackbar("Invalid birth year", "error")
             return;
         }
 
-        setOnboardingFormData({...onboardingFormData, incomeCategory});
-        setOnboardingFormData({...onboardingFormData, state});
+        if (state === '') {
+            triggerLocalSnackbar("Please select a state", "error")
+            return;
+        }
+        else {
+            setOnboardingFormData(prev => ({...prev, state}));
+            alert(onboardingFormData.state)
+        }
+
+        if (incomeCategory === '') {
+            triggerLocalSnackbar("Please select an income category", "error")
+            return;
+        }
+        else {
+            setOnboardingFormData(prev => ({...prev, incomeCategory}));
+            alert(onboardingFormData.incomeCategory)
+        }
 
         if (authUser) {
             try {
-                const response = await fetch('api/auth/signup/onboarding', {
+                const response = await fetch('/api/auth/signup/onboarding', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
