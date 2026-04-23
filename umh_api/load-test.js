@@ -10,12 +10,9 @@ export const options = {
 };
 
 export default function () {
-  const url = 'http://localhost:5000/api/auth/signin'; // Ensure this matches your launched server port!
-
-
+  const url = 'http://localhost:5000/api/auth/signin'; 
 
   // 1. You MUST provide the exact JSON structure your auth route expects.
-  // Replace these with a real username/email and password that actually exists in your database.
   const payload = JSON.stringify({
     email: 'testuser@example.com', 
     password: 'password123',
@@ -28,14 +25,12 @@ export default function () {
     },
   };
 
-  // 3. Notice we changed http.get() to http.post()
+  // 3. This is where the actual HTTP POST request happens. We send the payload and headers together.
   const res = http.post(url, payload, params); 
   
   // 4. Check if the login was actually successful
   check(res, {
     'is status 200 (Login Success)': (r) => r.status === 200,
-    // Optional: If your server sends a token back, you can verify it isn't crashing by checking for a 500 error instead
-    // 'did not crash': (r) => r.status !== 500, 
   });
 
   sleep(1); 
