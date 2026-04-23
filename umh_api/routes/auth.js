@@ -7,25 +7,36 @@ const verify = require('../middleware/auth');
 const UserProfile = require('../models/UserProfile');
 
 router.post('/signin', async (req, res) => {
-    let { email, password } = req.body
-    email = email.toLowerCase()
-    //check user existence
-    const user = await User.findOne({email: email})
-    if (!user)
-        return res.status(400).json({status: "failed", message: "User not found"})
+    try {
+        let { email, password } = req.body;
 
-    //check password
-    const validUser = await bcrypt.compare(password, user.password)
-    if (!validUser)
-        return res.status(400).json({status: "failed", message: "Invalid Password"})
+        if (!email || !password) {
+            return res.status(400).json({status: "failed", message: "Please provide both email and password"});
+        }
+        email = email.toLowerCase(); 
 
-    const token = jwt.sign(
-        { _id: user._id},
-        process.env.TOKEN_SECRET,
-        { expiresIn: '2h' }
-    )
+        //check user existence
+        const user = await User.findOne({email: email});
+        if (!user)
+            return res.status(404).json({status: "failed", message: "User not found"});
 
-    res.status(200).json({status: "success", token: token, name: user.name, onboarding: user.onboarding})
+        //check password
+        const validUser = await bcrypt.compare(password, user.password);
+        if (!validUser)
+            return res.status(400).json({status: "failed", message: "Invalid Password"});
+
+        const token = jwt.sign(
+            { _id: user._id},
+            process.env.TOKEN_SECRET,
+            { expiresIn: '2h' }
+        );
+
+        res.status(200).json({status: "success", token: token, name: user.name, onboarding: user.onboarding});
+
+    } catch (err) {
+        console.error("Login Crash Prevented:", err.message);
+        res.status(500).json({status: "failed", message: "Internal Server Error"});
+    }
 });
 
 router.post('/signup', async (req, res) => {

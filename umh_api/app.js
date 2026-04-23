@@ -13,7 +13,7 @@ const connectDB = async () => {
     await mongoose.connect(process.env.DATABASE_URL)
     console.log("DB Connected successfully")
   } catch (err) {
-    console.error("Database connection failed")
+    console.error("Database connection failed! The exact error is:", err.message)
     process.exit(1)
   }
 }
@@ -27,6 +27,11 @@ app.use(cors({
 
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
+
+//route for stress test
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ status: 'ok', message: 'Server is running perfectly' });
+});
 
 
 // routes
