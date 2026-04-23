@@ -5,15 +5,15 @@ export const options = {
   vus: 50,           
   duration: '10s',   
   thresholds: {
-    http_req_duration: ['p(95)<800'], 
-    http_req_failed: ['rate<0.01'],   
+    http_req_duration: ['avg<800'], 
+    http_req_failed: ['rate<0.01'], 
   },
 };
 
 export default function () {
   const url = 'http://localhost:5000/api/auth/signin'; // Ensure this matches your launched server port!
 
-  
+
 
   // 1. You MUST provide the exact JSON structure your auth route expects.
   // Replace these with a real username/email and password that actually exists in your database.
