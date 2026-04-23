@@ -29,42 +29,10 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
 //route for stress test
-app.get('/api/auth/signin', (req, res) => {
+app.get('/api/health', (req, res) => {
   res.status(200).json({ status: 'ok', message: 'Server is running perfectly' });
 });
 
-router.post('/signin', async (req, res) => {
-    try {
-        let { email, password } = req.body;
-
-        if (!email || !password) {
-            return res.status(400).json({status: "failed", message: "Please provide both email and password"});
-        }
-        email = email.toLowerCase(); 
-
-        //check user existence
-        const user = await User.findOne({email: email});
-        if (!user)
-            return res.status(404).json({status: "failed", message: "User not found"});
-
-        //check password
-        const validUser = await bcrypt.compare(password, user.password);
-        if (!validUser)
-            return res.status(400).json({status: "failed", message: "Invalid Password"});
-
-        const token = jwt.sign(
-            { _id: user._id},
-            process.env.TOKEN_SECRET,
-            { expiresIn: '2h' }
-        );
-
-        res.status(200).json({status: "success", token: token, name: user.name, onboarding: user.onboarding});
-
-    } catch (err) {
-        console.error("Login Crash Prevented:", err.message);
-        res.status(500).json({status: "failed", message: "Internal Server Error"});
-    }
-});
 
 // routes
 const authRouter = require('./routes/auth');
