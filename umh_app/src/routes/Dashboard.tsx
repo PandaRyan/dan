@@ -6,7 +6,12 @@ import HealthcarePicture from "../assets/images/Healthcare-UMH.png"
 import TransportationPicture from "../assets/images/Transportation-UMH.png"
 import UtilitiesPicture from "../assets/images/Utilities-UMH.jpg"
 import OthersPicture from "../assets/images/Others-UMH.jpg"
+import BoltIcon from '@mui/icons-material/Bolt';
+import DirectionsBusIcon from '@mui/icons-material/DirectionsBus';
+import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import SchoolIcon from '@mui/icons-material/School';
+import LocalGroceryStoreIcon from '@mui/icons-material/LocalGroceryStore';
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 
 
 const categoryImages: Record<string, string> = {
@@ -21,45 +26,45 @@ const categoryImages: Record<string, string> = {
 const categoryText: Record<string, { header: string, description: string, icons: React.ReactNode[] }> = {
   Utilities: {
     header: "Utilities",
-    description: "Explore the latest utility tariffs, check your eligibility for targeted electricity subsidies, and track consumption.",
+    description: "Check your eligibility for Rebat Elektrik and water subsidies through PADU.",
     icons: [
-      <SchoolIcon key="bolt" fontSize="large" />,
+      <BoltIcon key="bolt" fontSize="large" />,
     ]
   },
   Transportation: {
     header: "Transportation",
-    description: "Navigate petrol subsidy rationalization updates and explore My50 monthly travel passes for RapidKL.",
+    description: "Navigate fuel assistance via BUDI MADANI and explore public transit like My50 and FLYsiswa.",
 
     icons: [
-      <SchoolIcon key="bolt" fontSize="large" />,
+      <DirectionsBusIcon key="bus" fontSize="large" />,
     ]
   },
   Healthcare: {
     header: "Healthcare",
-    description: "Understand national health insurance schemes like the Madani Medical Scheme and find affordable clinic locations.",
+    description: "Access fully subsidized care via Skim Perubatan Madani, PEKA B40 and mySalam.",
     icons: [
-      <SchoolIcon key="bolt" fontSize="large" />,
+      <LocalHospitalIcon key="hospital" fontSize="large" />,
     ]
   },
   Education: {
     header: "Education",
-    description: "Discover subsidies for educational materials, early schooling assistance, and higher education benefits such as Gemini for Education.",
+    description: "Discover Bantuan Awal Persekolahan (BAP) for school, book vouchers, and PTPTN.",
     icons: [
-      <SchoolIcon key="bolt" fontSize="large" />,
+      <SchoolIcon key="school" fontSize="large" />,
     ]
   },
   Groceries: {
     header: "Groceries",
-    description: "Stay resilient against inflation with MyKasih credits, and the latest Jualan Rahmah locations.",
+    description: "Manage your cost of living with Sumbangan Asas Rahmah (SARA) and locate the nearest Jualan Payung Rahmah.",
     icons: [
-      <SchoolIcon key="bolt" fontSize="large" />,
+      <LocalGroceryStoreIcon key="grocery" fontSize="large" />,
     ]
   },
   Others: {
     header: "Others",
-    description: "Covers every other aspects of assistance you can think of! From Sumbangan Tunai Rahmah (STR) to tax reliefs, you name the category, we'll match an available subsidy.",
+    description: "Explore Sumbangan Tunai Rahmah (STR), e-Madani digital wallets and income tax reliefs.",
     icons: [
-      <SchoolIcon key="bolt" fontSize="large" />,
+      <AccountBalanceWalletIcon key="wallet" fontSize="large" />,
     ]
   },
 };
@@ -69,7 +74,7 @@ interface ThemedGrid extends GridProps {
 }
 
 
-const ThemedGrid = ({ title, onClick}: ThemedGrid) => {
+const ThemedGrid = ({ title, onClick }: ThemedGrid) => {
   return (
     <>
       <Box
@@ -160,7 +165,7 @@ const ThemedGrid = ({ title, onClick}: ThemedGrid) => {
         {/* Icons */}
         <Box sx={{
         }}>
-          <SchoolIcon fontSize="large" />
+          {categoryText[title].icons}
         </Box>
         {/* Footer Text */}
         <Box
