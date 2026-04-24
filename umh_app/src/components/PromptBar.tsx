@@ -1,11 +1,29 @@
-import { AppBar, Toolbar, TextField, Box, IconButton, } from '@mui/material';
+import { AppBar, Toolbar, TextField, Box, IconButton, Typography, } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
+import type { KeyboardEvent } from 'react';
 
-export const PromptBar = () => {
+interface PromptBarProps {
+  value: string;
+  onChange: (newValue: string) => void;
+  onSend: () => void;
+}
+
+export const PromptBar = ({ value, onChange, onSend }: PromptBarProps) => {
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      if (value.trim()) {
+        onSend();
+      }
+      
+    }
+  }
+
   return (
     <Box sx={{
       position: 'fixed',
-      bottom: '15%',
+      bottom: '5%',
       left: '50%',
       transform: 'translateX(-50%)',
       width: '700px',
@@ -15,19 +33,22 @@ export const PromptBar = () => {
         sx={{
           borderRadius: 5,
           backgroundColor: '#BDA891',
+          textAlign: 'center'
         }}
       >
         <Toolbar sx={{
           alignItems: 'flex-end', 
           pb: 2,                  
           pt: 2,
-
         }}
         >
           <TextField
             multiline
             size="small"
-            placeholder="Enter prompt..."
+            placeholder="Try asking about fuel subsidies!"
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            onKeyDown={handleKeyDown}
             sx={{
               backgroundColor: '#BDA891',
               borderRadius: 1,
@@ -45,8 +66,20 @@ export const PromptBar = () => {
               }
             }}
           />
-          <IconButton sx={{ ml: 1 }}><SendIcon /></IconButton>
+          <IconButton 
+            sx={{ ml: 1 }}
+            onClick={() => {
+              if(value.trim()) onSend();
+            }}
+            disabled={!value.trim()}
+          >
+              <SendIcon />
+          </IconButton>
         </Toolbar>
+
+        <Typography variant="caption" sx={{color: "#6C513C"}}>
+            Powered by Z.AI - Z.AI may make mistakes.
+        </Typography>
       </AppBar>
     </Box>
   )

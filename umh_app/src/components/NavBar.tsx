@@ -116,6 +116,10 @@ export const NavBar = () => {
     navigate('/dashboard');
   }
 
+  const handleNavigate = (category: string) => {
+    navigate('/chat/'+category)
+  }
+
   return (
     <>
       <CssBaseline />
@@ -217,12 +221,12 @@ export const NavBar = () => {
                 borderRight: '1px solid #e0e0e0',
                 py: 4
               }}>
-                <MenuItem onClick={handleClose} onMouseEnter={() => setHoveredCategory('Utilities')}>Utilities</MenuItem>
-                <MenuItem onClick={handleClose} onMouseEnter={() => setHoveredCategory('Transportation')}>Transportation</MenuItem>
-                <MenuItem onClick={handleClose} onMouseEnter={() => setHoveredCategory('Healthcare')}>Healthcare</MenuItem>
-                <MenuItem onClick={handleClose} onMouseEnter={() => setHoveredCategory('Education')}>Education</MenuItem>
-                <MenuItem onClick={handleClose} onMouseEnter={() => setHoveredCategory('Groceries')}>Groceries</MenuItem>
-                <MenuItem onClick={handleClose} onMouseEnter={() => setHoveredCategory('Others')}>Others</MenuItem>
+                <MenuItem onClick={() => handleNavigate("utilities")} onMouseEnter={() => setHoveredCategory('Utilities')}>Utilities</MenuItem>
+                <MenuItem onClick={() => handleNavigate("transportation")} onMouseEnter={() => setHoveredCategory('Transportation')}>Transportation</MenuItem>
+                <MenuItem onClick={() => handleNavigate("healthcare")} onMouseEnter={() => setHoveredCategory('Healthcare')}>Healthcare</MenuItem>
+                <MenuItem onClick={() => handleNavigate("education")} onMouseEnter={() => setHoveredCategory('Education')}>Education</MenuItem>
+                <MenuItem onClick={() => handleNavigate("groceries")} onMouseEnter={() => setHoveredCategory('Groceries')}>Groceries</MenuItem>
+                <MenuItem onClick={() => handleNavigate("others")} onMouseEnter={() => setHoveredCategory('Others')}>Others</MenuItem>
               </Box>
               <Box sx={{
                 flexGrow: 1,

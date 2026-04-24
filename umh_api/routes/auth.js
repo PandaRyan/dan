@@ -42,6 +42,7 @@ router.post('/signin', async (req, res) => {
 router.post('/signup', async (req, res) => {
     try {
         let { name, email, password } = req.body
+        email = email.toLowerCase
         
         //check user existence
         const userExists = await User.findOne({ email: email})
@@ -98,6 +99,21 @@ router.post('/signup/onboarding', verify, async (req, res) => {
     } catch (err) {
         console.log(err)
         res.status(500).json({status: "failed", error: err})
+    }
+})
+
+router.get('/getUserDetails', verify, async(req, res) => {
+    try {
+        const userdetails = await UserProfile.findOne({user: req.user._id}).select('birthYear state incomeCategory');
+        res.status(200).json({
+            status: "success", 
+            birthyear: userdetails.birthYear,
+            state: userdetails.state,
+            incomeCategory: userdetails.incomeCategory
+        });
+    } catch (err) {
+        console.error("Error fetching user details:", err.message);
+        res.status(500).json({status: "failed", message: "Internal Server Error"});
     }
 })
 

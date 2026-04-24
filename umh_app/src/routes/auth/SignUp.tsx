@@ -226,10 +226,8 @@ export const Onboarding: React.FC = () => {
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         setIsLoading(true);
-        alert("Submitting onboarding data: " + birthYear + state + incomeCategory)
         if (Number(birthYear) <= 2008 && Number(birthYear) > 1900) {
             setOnboardingFormData(prev => ({ ...prev, birthYear }));
-            alert(onboardingFormData.birthYear)
         } else {
             setYearError(true);
             triggerLocalSnackbar("Invalid birth year", "error")

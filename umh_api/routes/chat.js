@@ -47,7 +47,7 @@ async function retrieveContext(question) {
 }
 
 router.post('/groceries', async(req, res) => {
-    let { usermsg } = req.body;
+    let { usermsg, userdetails } = req.body;
 
     try {
         const client = new OpenAI({
@@ -56,8 +56,6 @@ router.post('/groceries', async(req, res) => {
         })
 
         const hits = await retrieveContext(usermsg);
-
-        console.log(hits)
         
         if (!Array.isArray(hits)) {
             return res.status(500).json({
@@ -109,6 +107,12 @@ router.post('/groceries', async(req, res) => {
                     ###
                     CONTEXT:
                     ${contextString}
+
+                    ###
+                    User Details:
+                    Birth Year: ${userdetails.birthYear}
+                    Income Group: ${userdetails.incomeGroup}
+                    State of Residence: ${userdetails.state}
                     `
                 },
                 {
@@ -118,9 +122,12 @@ router.post('/groceries', async(req, res) => {
             ],
             temperature: 0.6,
             response_format: {"type": "json_object"},
+            max_tokens: 500
         })
 
-        res.status(201).json({response});
+        const returnResponse = response.choices[0].message.content;
+
+        res.status(201).json({returnResponse});
     } catch(err) {
         console.log(err)
         res.status(500).json({
