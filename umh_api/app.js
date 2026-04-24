@@ -17,7 +17,10 @@ const connectDB = async () => {
     process.exit(1)
   }
 }
-connectDB()
+
+
+  connectDB();
+
 
 app.use(cors({
   origin: 'http://localhost:5173',
@@ -36,11 +39,11 @@ app.get('/api/health', (req, res) => {
 // routes
 const authRouter = require('./routes/auth');
 const newsRouter = require('./routes/news');
-const subsidyRouter = require('./routes/subsidy');
+const chatRouter = require('./routes/chat');
 
 app.use('/api/news', newsRouter);
 app.use('/api/auth', authRouter)
-app.use('/api/subsidy', subsidyRouter);
+app.use('/api/chat', chatRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

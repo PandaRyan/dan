@@ -10,25 +10,26 @@ export const options = {
 };
 
 export default function () {
-  const url = 'http://localhost:5000/api/auth/signin'; 
+  const url = 'http://localhost:5000/api/health'; // Change this to your actual auth endpoint, e.g., 'http://localhost:5000/api/auth/login' 
+  // or change to zai later
 
-  // 1. You MUST provide the exact JSON structure your auth route expects.
+  //json structure for login
   const payload = JSON.stringify({
     email: 'testuser@example.com', 
     password: 'password123',
   });
 
-  // 2. You MUST tell Express that you are sending JSON data, otherwise req.body will be empty!
+  //send the payload as json
   const params = {
     headers: {
       'Content-Type': 'application/json',
     },
   };
 
-  // 3. This is where the actual HTTP POST request happens. We send the payload and headers together.
+  //send the payload and headers together
   const res = http.post(url, payload, params); 
   
-  // 4. Check if the login was actually successful
+  //see if the login was actually successful
   check(res, {
     'is status 200 (Login Success)': (r) => r.status === 200,
   });
