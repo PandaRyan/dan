@@ -30,6 +30,7 @@ jobs:
       - name: Start Express Server in Background
         env: 
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          CHROMA_API_KEY: ${{ secrets.CHROMA_API_KEY }}
         run: |
           npm run start &
           npx wait-on http://localhost:5000/api/health
