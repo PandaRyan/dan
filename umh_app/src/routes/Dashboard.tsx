@@ -8,10 +8,22 @@ import UtilitiesPicture from "../assets/images/Utilities-UMH.jpg"
 import OthersPicture from "../assets/images/Others-UMH.jpg"
 import BoltIcon from '@mui/icons-material/Bolt';
 import DirectionsBusIcon from '@mui/icons-material/DirectionsBus';
-import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import SchoolIcon from '@mui/icons-material/School';
 import LocalGroceryStoreIcon from '@mui/icons-material/LocalGroceryStore';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import WaterDropIcon from '@mui/icons-material/WaterDrop';
+import EmojiObjectsIcon from '@mui/icons-material/EmojiObjects';
+import TrainIcon from '@mui/icons-material/Train';
+import LocalGasStationIcon from '@mui/icons-material/LocalGasStation';
+import MedicationIcon from '@mui/icons-material/Medication';
+import HealingIcon from '@mui/icons-material/Healing';
+import AccessibleIcon from '@mui/icons-material/Accessible';
+import LocalLibraryIcon from '@mui/icons-material/LocalLibrary';
+import SquareFootIcon from '@mui/icons-material/SquareFoot';
+import StorefrontIcon from '@mui/icons-material/Storefront';
+import SetMealIcon from '@mui/icons-material/SetMeal';
+import FamilyRestroomIcon from '@mui/icons-material/FamilyRestroom';
+import AddIcCallIcon from '@mui/icons-material/AddIcCall';
 
 
 const categoryImages: Record<string, string> = {
@@ -26,45 +38,45 @@ const categoryImages: Record<string, string> = {
 const categoryText: Record<string, { header: string, description: string, icons: React.ReactNode[] }> = {
   Utilities: {
     header: "Utilities",
-    description: "Check your eligibility for Rebat Elektrik and water subsidies through PADU.",
+    description: "Stop worrying about high utility bills. Our tool connects your profile with the latest government data to automatically see if you can lower your monthly expenses. We’ll help you check your eligibility for Rebat Elektrik and water subsidies through PADU so you can keep more money in your pocket for your family.",
     icons: [
-      <BoltIcon key="bolt" fontSize="large" />,
+      <BoltIcon key="bolt" fontSize="large" />,<WaterDropIcon key="bolt" fontSize="large" />,<EmojiObjectsIcon key="bolt" fontSize="large" />
     ]
   },
   Transportation: {
     header: "Transportation",
-    description: "Navigate fuel assistance via BUDI MADANI and explore public transit like My50 and FLYsiswa.",
+    description: "Get moving without the financial stress. We help you navigate monthly fuel assistance via BUDI MADANI and maximize your travel with unlimited transit passes like My50. For students, we make it easy to explore flight subsidies through FLYsiswa, ensuring you get the most out of every journey while keeping your transport costs low.",
 
     icons: [
-      <DirectionsBusIcon key="bus" fontSize="large" />,
+      <DirectionsBusIcon key="bus" fontSize="large" />,<TrainIcon key="bus" fontSize="large" />,<LocalGasStationIcon key="bus" fontSize="large" />,
     ]
   },
   Healthcare: {
     header: "Healthcare",
-    description: "Access fully subsidized care via Skim Perubatan Madani, PEKA B40 and mySalam.",
+    description: "Your health should never be a financial burden. We help you access fully subsidized medical care through Skim Perubatan Madani, ensuring you can visit private clinics for free when you're unwell. Our navigator also checks your eligibility for PEKA B40 health screenings and helps you understand the protection offered by mySalam, so you and your family can get the treatment you need with total peace of mind.",
     icons: [
-      <LocalHospitalIcon key="hospital" fontSize="large" />,
+      <MedicationIcon key="hospital" fontSize="large" />,<HealingIcon key="hospital" fontSize="large" />,<AccessibleIcon key="hospital" fontSize="large" />,
     ]
   },
   Education: {
     header: "Education",
-    description: "Discover Bantuan Awal Persekolahan (BAP) for school, book vouchers, and PTPTN.",
+    description: "Investing in your children’s future shouldn’t be a struggle. We help you secure the support your family needs, from immediate school expenses through Bantuan Awal Persekolahan (BAP) to digital book vouchers for students. Our tool also simplifies the path to higher education by helping you navigate PTPTN applications and repayment options, ensuring that every student has the tools and funding to succeed in their studies.",
     icons: [
-      <SchoolIcon key="school" fontSize="large" />,
+      <SchoolIcon key="school" fontSize="large" />,<LocalLibraryIcon key="school" fontSize="large" />,<SquareFootIcon key="school" fontSize="large" />,
     ]
   },
   Groceries: {
     header: "Groceries",
-    description: "Manage your cost of living with Sumbangan Asas Rahmah (SARA) and locate the nearest Jualan Payung Rahmah.",
+    description: "Manage your daily expenses with confidence and ease. We help you track your Sumbangan Asas Rahmah (SARA) credits so you always know exactly how much you have for essential groceries. Our navigator also helps you locate the nearest Jualan Payung Rahmah, connecting you to the best local deals on household items and food, ensuring you get the most value for every Ringgit spent on your family’s needs.",
     icons: [
-      <LocalGroceryStoreIcon key="grocery" fontSize="large" />,
+      <LocalGroceryStoreIcon key="grocery" fontSize="large" />,<StorefrontIcon key="school" fontSize="large" />,<SetMealIcon key="school" fontSize="large" />,
     ]
   },
   Others: {
     header: "Others",
-    description: "Explore Sumbangan Tunai Rahmah (STR), e-Madani digital wallets and income tax reliefs.",
+    description: "Can't find exactly what you’re looking for? Don't worry—we’ve still got you covered. From tracking your Sumbangan Tunai Rahmah (STR) payments and e-Madani digital wallet credits to uncovering hidden income tax reliefs, our platform is built to catch every opportunity. Whether it’s a new government initiative or a niche grant we haven't listed yet, our AI stays updated in real-time to ensure you never miss a chance to strengthen your family's 'Ringgit Resilience'.",
     icons: [
-      <AccountBalanceWalletIcon key="wallet" fontSize="large" />,
+      <AccountBalanceWalletIcon key="wallet" fontSize="large" />,<AddIcCallIcon key="school" fontSize="large" />,<FamilyRestroomIcon key="school" fontSize="large" />,
     ]
   },
 };
@@ -171,12 +183,14 @@ const ThemedGrid = ({ title, onClick }: ThemedGrid) => {
         <Box
           sx={{
             zIndex: 1,
-            mb: 1,
-            color: '#5d4430',
+            mb: 1.5,
+            color: '#573d28', // Your specific deep earthy brown
+            fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
             fontSize: '1.05rem',
-            lineHeight: 1.6,
-            fontWeight: 400,
-            letterSpacing: '-0.01em',
+            lineHeight: 1.6, // Slightly more air to prevent the dark color from feeling heavy
+            fontWeight: 500, // Medium weight: The "sweet spot" for modern descriptions
+            letterSpacing: '-0.01em', // Subtle tightening for a clean, modern look
+            opacity: 0.95, // Keeps it sharp but prevents it from feeling "harsh"
           }}
         >
           {categoryText[title].description}
