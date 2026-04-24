@@ -5,12 +5,15 @@ import Themedbutton from '../../components/Themedbutton';
 import { ThemedSnackbar } from '../../components/ThemedSnackBar';
 import { useAuth } from '../../components/context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { ScreenLoading } from '../../components/auth/ScreenLoading';
 
 export const SignIn: React.FC = () => {
     const [formData, setFormData] = useState({
         email: '',
         password: '',
     });
+
+    const [isLoading, setIsLoading] = useState(false);
 
     const [snackbarConfig, setSnackbarConfig] = useState<{open: boolean, msg: string, sev: "error" | "success" | "warning"}>({
         open: false,
@@ -39,6 +42,8 @@ export const SignIn: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        setIsLoading(true);
+
         try {
             const response = await fetch('api/auth/signin', {
                 method: 'POST',
@@ -58,9 +63,11 @@ export const SignIn: React.FC = () => {
                     navigate('/');
                 }
             } else {
+                setIsLoading(false);            //if the login fail
                 triggerLocalSnackbar("Incorrect email or password.", "error")
             }
         } catch (err) {
+            setIsLoading(false);                    //if server crash
             triggerLocalSnackbar("Server error" + err, "error")
         }
     };
@@ -121,6 +128,9 @@ export const SignIn: React.FC = () => {
                 severity={snackbarConfig.sev}
                 onClose={handleClose}
             />
+
+            <ScreenLoading open={isLoading} />
+            
         </Container>
     );
 };
