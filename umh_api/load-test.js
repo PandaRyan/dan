@@ -10,7 +10,7 @@ export const options = {
 };
 
 export default function () {
-  const url = 'http://localhost:5000/api/auth/signin'; 
+  const url = 'http://localhost:5000/api/health'; // Change this to your actual auth endpoint, e.g., 'http://localhost:5000/api/auth/login'
 
   // 1. You MUST provide the exact JSON structure your auth route expects.
   const payload = JSON.stringify({
