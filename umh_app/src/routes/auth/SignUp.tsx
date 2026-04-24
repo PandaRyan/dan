@@ -5,6 +5,7 @@ import Themedbutton from '../../components/Themedbutton';
 import { ThemedSnackbar } from '../../components/ThemedSnackBar';
 import { useAuth } from '../../components/context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { ScreenLoading } from '../../components/auth/ScreenLoading';
 
 const incomeCategories = [
     { value: 'B40', label: 'B40 (Household Income < RM 5,250)' },
@@ -18,31 +19,31 @@ const malaysianStates = [
     'Selangor', 'Terengganu', 'W.P. Kuala Lumpur', 'W.P. Labuan', 'W.P. Putrajaya'
 ];
 
-
 export const SignUp: React.FC = () => {
     const [name, setName] = useState<string>('');
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [confirmPassword, setConfirmPassword] = useState<string>('');
-  //test
+    const [isLoading, setIsLoading] = useState(false);
+    //test
     const [signUpFormData, setSignUpFormData] = useState({
         name: '',
         email: '',
         password: '',
     });
 
-    const [snackbarConfig, setSnackbarConfig] = useState<{open: boolean, msg: string, sev: "error" | "success" | "warning"}>({
+    const [snackbarConfig, setSnackbarConfig] = useState<{ open: boolean, msg: string, sev: "error" | "success" | "warning" }>({
         open: false,
         msg: '',
         sev: 'success'
     });
-    
+
     const triggerLocalSnackbar = (msg: string, sev: "error" | "success" | "warning") => {
-        setSnackbarConfig({open: true, msg, sev});
+        setSnackbarConfig({ open: true, msg, sev });
     };
 
     const handleClose = () => {
-        setSnackbarConfig((prev) => ({...prev, open:false}));
+        setSnackbarConfig((prev) => ({ ...prev, open: false }));
     }
 
 
@@ -75,24 +76,29 @@ export const SignUp: React.FC = () => {
     const handleNext = async (event: React.FormEvent) => {
         event.preventDefault();
 
-        try {                            
+        setIsLoading(true);
+
+        try {
             if (name === '') {
                 triggerLocalSnackbar("Name cannot be empty", "error")
+                setIsLoading(false);        //if validation fail
                 return;
             } else {
-                setSignUpFormData({...signUpFormData, name});
+                setSignUpFormData({ ...signUpFormData, name });
 
             }
 
             if (!validateEmail(email)) {
                 triggerLocalSnackbar("Invalid email", "error")
+                setIsLoading(false);
                 return;
             } else {
-                setSignUpFormData({...signUpFormData, email});
+                setSignUpFormData({ ...signUpFormData, email });
             }
 
-            if (password === confirmPassword && password!== '') {
-                setSignUpFormData({...signUpFormData, password});
+            if (password === confirmPassword && password !== '') {
+                setSignUpFormData({ ...signUpFormData, password });
+                setIsLoading(false);
             } else {
                 triggerLocalSnackbar("Password mismatch", "error")
                 return;
@@ -111,10 +117,12 @@ export const SignUp: React.FC = () => {
                 await UserContextLogin({ token: data.token, name: data.name });
                 navigate('/signup/onboarding');
             } else {
-                triggerLocalSnackbar("Signup unsuccessful: "+data.message, "error")
+                setIsLoading(false);            //error on api
+                triggerLocalSnackbar("Signup unsuccessful: " + data.message, "error")
             }
         } catch (err) {
-            triggerLocalSnackbar("Signup unsuccessful: "+err, "error")
+            setIsLoading(false);            //network error
+            triggerLocalSnackbar("Signup unsuccessful: " + err, "error")
         }
     }
 
@@ -166,6 +174,7 @@ export const SignUp: React.FC = () => {
                 severity={snackbarConfig.sev}
                 onClose={handleClose}
             />
+            <ScreenLoading open={isLoading} />
         </Container>
     );
 };
@@ -174,6 +183,7 @@ export const Onboarding: React.FC = () => {
     const [birthYear, setBirthYear] = useState<string>('');
     const [state, setState] = useState<string>('');
     const [incomeCategory, setIncomeCategory] = useState<string>('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const [onboardingFormData, setOnboardingFormData] = useState({
         birthYear: '',
@@ -185,18 +195,18 @@ export const Onboarding: React.FC = () => {
     const navigate = useNavigate();
     const [yearError, setYearError] = useState(false);
 
-    const [snackbarConfig, setSnackbarConfig] = useState<{open: boolean, msg: string, sev: "error" | "success" | "warning"}>({
+    const [snackbarConfig, setSnackbarConfig] = useState<{ open: boolean, msg: string, sev: "error" | "success" | "warning" }>({
         open: false,
         msg: '',
         sev: 'success'
     });
-    
+
     const triggerLocalSnackbar = (msg: string, sev: "error" | "success" | "warning") => {
-        setSnackbarConfig({open: true, msg, sev});
+        setSnackbarConfig({ open: true, msg, sev });
     };
 
     const handleClose = () => {
-        setSnackbarConfig((prev) => ({...prev, open:false}));
+        setSnackbarConfig((prev) => ({ ...prev, open: false }));
     }
 
     const handleOnboardingValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -215,13 +225,15 @@ export const Onboarding: React.FC = () => {
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-        alert("Submitting onboarding data: "+birthYear+ state+ incomeCategory)
+        setIsLoading(true);
+        alert("Submitting onboarding data: " + birthYear + state + incomeCategory)
         if (Number(birthYear) <= 2008 && Number(birthYear) > 1900) {
-            setOnboardingFormData(prev => ({...prev, birthYear}));
+            setOnboardingFormData(prev => ({ ...prev, birthYear }));
             alert(onboardingFormData.birthYear)
         } else {
             setYearError(true);
             triggerLocalSnackbar("Invalid birth year", "error")
+            setIsLoading(false);
             return;
         }
 
@@ -230,16 +242,17 @@ export const Onboarding: React.FC = () => {
             return;
         }
         else {
-            setOnboardingFormData(prev => ({...prev, state}));
+            setOnboardingFormData(prev => ({ ...prev, state }));
             alert(onboardingFormData.state)
         }
 
         if (incomeCategory === '') {
             triggerLocalSnackbar("Please select an income category", "error")
+            setIsLoading(false);
             return;
         }
         else {
-            setOnboardingFormData(prev => ({...prev, incomeCategory}));
+            setOnboardingFormData(prev => ({ ...prev, incomeCategory }));
             alert(onboardingFormData.incomeCategory)
         }
 
@@ -261,13 +274,16 @@ export const Onboarding: React.FC = () => {
                     }, 1000);       //1 second so they see the green mesage
                 } else {
                     const errorData = await response.json();
-                    triggerLocalSnackbar("Onboarding failed: "+errorData.error, "error")
+                    triggerLocalSnackbar("Onboarding failed: " + errorData.error, "error")
+                    setIsLoading(false);
                 }
 
             } catch (err) {
-                triggerLocalSnackbar("Server error: "+err, "error")
+                triggerLocalSnackbar("Server error: " + err, "error")
+                setIsLoading(false);
             }
         } else {
+            setIsLoading(false);
             navigate('/signin');
         }
     }
@@ -339,6 +355,7 @@ export const Onboarding: React.FC = () => {
                     severity={snackbarConfig.sev}
                     onClose={handleClose}
                 />
+                <ScreenLoading open={isLoading} />
             </Container>
         </>
     );
