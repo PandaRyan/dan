@@ -16,6 +16,7 @@ interface ChatMessage {
     options?: responseList[];               //if its ai giving options to user
 }
 
+/*
 const initialChatHistory: ChatMessage[] = [
     {
         sender: 'user',
@@ -49,7 +50,7 @@ const initialChatHistory: ChatMessage[] = [
         sender: 'error',
         text: "Error generating response. Please try again."
     }
-];
+];*/
 
 export const PromptPage = () => {
     const { authUser } = useAuth();
@@ -115,6 +116,7 @@ export const PromptPage = () => {
             setUsermsg('');
         } catch (err) {
             setIsLoading(false);
+            console.error('Error:', err);
             setChatHistory((prev) => [...prev, { sender: 'error', text: "Error generating response. Please try again." }]);
             return;
         }
