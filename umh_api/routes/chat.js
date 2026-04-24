@@ -57,6 +57,7 @@ router.post('/groceries', async(req, res) => {
 
         const hits = await retrieveContext(usermsg);
 
+        console.log(hits) 
         
         if (!Array.isArray(hits)) {
             return res.status(500).json({
