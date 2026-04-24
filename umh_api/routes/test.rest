@@ -54,7 +54,12 @@ POST http://localhost:5000/api/chat/groceries
 Content-Type: application/json
 
 {
-    "usermsg": "I want to buy bread, what subsidy can i get?"
+    "userdetails": {
+        "state": "Selangor",
+        "incomeCategory": "B40",
+        "birthYear": "2008"
+    },
+    "usermsg": "tell me more about mykasih"
 }
 
 ###

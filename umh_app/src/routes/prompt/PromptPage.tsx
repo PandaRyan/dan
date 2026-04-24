@@ -85,7 +85,7 @@ export const PromptPage = () => {
             const detailsdata = await detailsresponse.json();
 
             const fetchedDetails = {
-                birthYear: detailsdata.birthYear,
+                birthYear: detailsdata.birthyear,
                 state: detailsdata.state,
                 incomeCategory: detailsdata.incomeCategory
             }
@@ -95,6 +95,8 @@ export const PromptPage = () => {
                 usermsg: usermsg,
                 userdetails: fetchedDetails
             }
+            
+            setUsermsg('');
 
             //fetch chat response
             const response = await fetch('/api/chat/' + category, {
@@ -104,17 +106,69 @@ export const PromptPage = () => {
             });
 
             const data = await response.json();
-            if (data.status===201) {
-                setChatHistory((prev) => [...prev, { sender: 'zai', title: data.main_response.subsidy_name, text: data.main_response.description, isPrimary: true }]); 
-            }
+
 
             setIsLoading(false);
-            if (data.status===201) {
-                setChatHistory((prev) => [...prev, { sender: 'user', text: usermsg }]);
+
+            if (response.ok && data.returnResponse) { 
+                let parsedResponse = data.returnResponse;
+
+                if (typeof parsedResponse === 'string') {
+                    try {
+                        const cleanString = parsedResponse.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+                        parsedResponse = JSON.parse(cleanString);
+                    } catch (parseError) {
+                        console.error("Failed to parse AI string:", parsedResponse);
+                        setChatHistory((prev) => [...prev, { sender: 'error', text: "AI returned an invalid data format. Please try again." }]);
+                        return;
+                    }
+                }
+
+                if (!parsedResponse?.main_response) {
+                    console.error("Parsed response is missing main_response:", parsedResponse);
+                    setChatHistory((prev) => [...prev, { sender: 'error', text: "AI response was missing the required data. Please try again." }]);
+                    return; // Stop execution
+                }
+
+                const newOptions: responseList[] = [
+                    {
+                        title: parsedResponse.main_response.subsidy_name,
+                        description: parsedResponse.main_response.description,
+                        isPrimary: true
+                    }
+                ];
+
+                const supp = parsedResponse.supplementary_response;
+                
+                if (supp && supp.available === "true") {
+                    if (Array.isArray(supp.subsidies)) {
+                        supp.subsidies.forEach((sub: any) => {
+                            newOptions.push({
+                                title: sub.subsidy_name,
+                                description: sub.description,
+                                isPrimary: false
+                            });
+                        });
+                    } 
+                    else if (supp.subsidy_name) {
+                        newOptions.push({
+                            title: supp.subsidy_name,
+                        description: supp.description,
+                            isPrimary: false
+                        });
+                    }
+                }
+
+                setChatHistory((prev) => [
+                    ...prev, 
+                    { sender: 'zai', options: newOptions }
+                ]);
+            } else {
+                setChatHistory((prev) => [...prev, { sender: 'error', text: "Server returned an error. Please try again." }]);
             }
 
-            setUsermsg('');
         } catch (err) {
+            setUsermsg(usermsg);
             setIsLoading(false);
             console.error('Error:', err);
             setChatHistory((prev) => [...prev, { sender: 'error', text: "Error generating response. Please try again." }]);
