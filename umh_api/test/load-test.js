@@ -15,8 +15,8 @@ export default function () {
 
   //json structure for login
   const payload = JSON.stringify({
-    email: 'testuser@example.com', 
-    password: 'password123',
+    email: 'jaydentest@gmail.com', 
+    password: 'umh_jaydentest',
   });
 
   //send the payload as json
