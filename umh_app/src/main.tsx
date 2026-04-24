@@ -40,7 +40,7 @@ const router = createBrowserRouter([
         element: <Dashboard />
       },
       {
-        path: '/chat',
+        path: '/chat/:category',
         element: <PromptPage />
       }
     ]
