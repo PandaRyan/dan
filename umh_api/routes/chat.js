@@ -755,26 +755,32 @@ async function callGemini(usermsg, systemInstructions, userdetails, contextStrin
             contents: usermsg
         });
 
-        const responseText = response.response.text();
+        const result = await model.generateContent(usermsg);
+        const responseText = result.response.text();
         
+        if (typeof responseText === 'object' && responseText !== null) {
+            return responseText; 
+        }
+
         try {
-            if (typeof responseText === 'object' && responseText !== null) {
-                return responseText; 
-            }
+            return JSON.parse(responseText);
         } catch (parseErr) {
-            return JSON.parse({
+            console.error("Gemini returned invalid JSON string:", responseText);
+            
+            // 5. Return the object directly! NO JSON.parse() needed here.
+            return {
                 "main_response": {
                     "subsidy_name": "Overview",
-                    "description": responseText
+                    "description": responseText || "Unable to extract a specific subsidy description."
                 },
                 "supplementary_response": {
                     "available": "false"
                 }
-            })
+            };
         }
 
     } catch (err) {
-        console.error("Gemini error: " + err);
+        console.error("Gemini API Error: " + err);
     }
 }
 
