@@ -743,7 +743,7 @@ async function callGemini(usermsg, systemInstructions, userdetails, contextStrin
     `
 
     try {
-        const model = geminiClient.getGenerativeModel({
+        const model = geminiClient.models.generateContent({
             model: "gemini-3-flash-preview",
             systemInstruction: completeContext,
             generationConfig: {
