@@ -746,7 +746,7 @@ async function callGemini(usermsg, systemInstructions, userdetails, contextStrin
         console.log(completeContext);
         
         const response = await geminiClient.models.generateContent({
-            model: "gemini-3-flash-preview",
+            model: "gemini-2.5-pro",
             systemInstruction: completeContext,
             generationConfig: {
                 temperature: 0.6,
