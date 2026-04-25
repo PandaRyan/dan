@@ -13,7 +13,6 @@ router.post('/signin', async (req, res) => {
         if (!email || !password) {
             return res.status(400).json({status: "failed", message: "Please provide both email and password"});
         }
-        email = email.toLowerCase(); 
 
         //check user existence
         const user = await User.findOne({email: email});
@@ -42,7 +41,6 @@ router.post('/signin', async (req, res) => {
 router.post('/signup', async (req, res) => {
     try {
         let { name, email, password } = req.body
-        email = email.toLowerCase
         
         //check user existence
         const userExists = await User.findOne({ email: email})
