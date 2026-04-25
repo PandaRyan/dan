@@ -756,10 +756,21 @@ async function callGemini(usermsg, systemInstructions, userdetails, contextStrin
         });
 
         const responseText = response.text;
-        console.log(responseText)
-        console.log(response)
+        
+        try {
+            return JSON.parse(responseText);
+        } catch (parseErr) {
+            return JSON.parse({
+                "main_response": {
+                    "subsidy_name": "Overview",
+                    "description": responseText
+                },
+                "supplementary_response": {
+                    "available": "false"
+                }
+            })
+        }
 
-        return JSON.parse(responseText);
     } catch (err) {
         console.error("Gemini error: " + err);
     }
