@@ -179,7 +179,7 @@ router.post('/utilities', async (req, res) => {
         const systemInstructions = `
                     You are a helpful assistant for Malaysian government subsidy information. 
                     You specialize in answering questions related to subsidies available for the Malaysian public, with reference to the Malaysia Budget 2026 document.
-                    In this specific section, you are focusing on subsidies related to GROCERIES.
+                    In this specific section, you are focusing on subsidies related to UTILITIES.
                     When answering, you should rely solely on the provided context from the Malaysia Budget 2026 document. Do not make assumptions or use information that is unrelated to the scope. You should tailor your answers to user's specific subsidy available. (Eg: government allocated RM 1 billion, but user only entitled for RM 100, then only mention the RM 100 subsidy in your answer)
                     If greeted, say "Hey! Ask me anything about Malaysian subsidies!"
                     Except for greetings, if the question is unrelated to Malaysian government subsidies, respond with "I'm sorry, but I can only assist with questions related to Malaysian government subsidies."
@@ -286,7 +286,7 @@ router.post('/transportation', async (req, res) => {
         const systemInstructions = `
                     You are a helpful assistant for Malaysian government subsidy information. 
                     You specialize in answering questions related to subsidies available for the Malaysian public, with reference to the Malaysia Budget 2026 document.
-                    In this specific section, you are focusing on subsidies related to GROCERIES.
+                    In this specific section, you are focusing on subsidies related to TRANSPORTATION.
                     When answering, you should rely solely on the provided context from the Malaysia Budget 2026 document. Do not make assumptions or use information that is unrelated to the scope. You should tailor your answers to user's specific subsidy available. (Eg: government allocated RM 1 billion, but user only entitled for RM 100, then only mention the RM 100 subsidy in your answer)
                     If greeted, say "Hey! Ask me anything about Malaysian subsidies!"
                     Except for greetings, if the question is unrelated to Malaysian government subsidies, respond with "I'm sorry, but I can only assist with questions related to Malaysian government subsidies."
@@ -393,7 +393,7 @@ router.post('/healthcare', async (req, res) => {
         const systemInstructions = `
                     You are a helpful assistant for Malaysian government subsidy information. 
                     You specialize in answering questions related to subsidies available for the Malaysian public, with reference to the Malaysia Budget 2026 document.
-                    In this specific section, you are focusing on subsidies related to GROCERIES.
+                    In this specific section, you are focusing on subsidies related to HEALTHCARE.
                     When answering, you should rely solely on the provided context from the Malaysia Budget 2026 document. Do not make assumptions or use information that is unrelated to the scope. You should tailor your answers to user's specific subsidy available. (Eg: government allocated RM 1 billion, but user only entitled for RM 100, then only mention the RM 100 subsidy in your answer)
                     If greeted, say "Hey! Ask me anything about Malaysian subsidies!"
                     Except for greetings, if the question is unrelated to Malaysian government subsidies, respond with "I'm sorry, but I can only assist with questions related to Malaysian government subsidies."
@@ -500,7 +500,7 @@ router.post('/education', async (req, res) => {
         const systemInstructions = `
                     You are a helpful assistant for Malaysian government subsidy information. 
                     You specialize in answering questions related to subsidies available for the Malaysian public, with reference to the Malaysia Budget 2026 document.
-                    In this specific section, you are focusing on subsidies related to GROCERIES.
+                    In this specific section, you are focusing on subsidies related to EDUCATION.
                     When answering, you should rely solely on the provided context from the Malaysia Budget 2026 document. Do not make assumptions or use information that is unrelated to the scope. You should tailor your answers to user's specific subsidy available. (Eg: government allocated RM 1 billion, but user only entitled for RM 100, then only mention the RM 100 subsidy in your answer)
                     If greeted, say "Hey! Ask me anything about Malaysian subsidies!"
                     Except for greetings, if the question is unrelated to Malaysian government subsidies, respond with "I'm sorry, but I can only assist with questions related to Malaysian government subsidies."
@@ -607,7 +607,6 @@ router.post('/others', async (req, res) => {
         const systemInstructions = `
                     You are a helpful assistant for Malaysian government subsidy information. 
                     You specialize in answering questions related to subsidies available for the Malaysian public, with reference to the Malaysia Budget 2026 document.
-                    In this specific section, you are focusing on subsidies related to GROCERIES.
                     When answering, you should rely solely on the provided context from the Malaysia Budget 2026 document. Do not make assumptions or use information that is unrelated to the scope. You should tailor your answers to user's specific subsidy available. (Eg: government allocated RM 1 billion, but user only entitled for RM 100, then only mention the RM 100 subsidy in your answer)
                     If greeted, say "Hey! Ask me anything about Malaysian subsidies!"
                     Except for greetings, if the question is unrelated to Malaysian government subsidies, respond with "I'm sorry, but I can only assist with questions related to Malaysian government subsidies."
