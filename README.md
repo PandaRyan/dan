@@ -11,6 +11,9 @@
 [![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?style=for-the-badge&logo=mongodb)](https://www.mongodb.com/)
 [![Vercel](https://img.shields.io/badge/Deployed-Vercel-000000?style=for-the-badge&logo=vercel)](https://vercel.com/)
 
+[DOCUMENTATIONS](https://drive.google.com/drive/folders/1H6aPB0bDB3UU3MiYefxOctcI_WoopRpo?usp=sharing)
+[PITCHING VIDEO](https://google.com)
+
 </div>
 
 ---
@@ -184,13 +187,11 @@ dan/
 | **Jayden Yew Jae Han** | Frontend Lead · UI/UX · CI Pipelines |
 | **Lee Wen Le** | Frontend · Auth Pages · Documentation |
 
-Built with 💚 for **UMHackathon 2026** · Universiti Malaya × PEKOM
-
 ---
 
 <div align="center">
 
-**bukit** · [Live Demo](https://bukit-dan.vercel.app/) · [Report Bug](mailto:umhackathon@um.edu.my) · [Request Feature](mailto:umhackathon@um.edu.my)
+**bukit** · [Live Demo](https://bukit-dan.vercel.app/)
 
 *Empowering Malaysians, one subsidy at a time.*
 
