@@ -49,7 +49,6 @@ async function retrieveContext(question) {
 router.post('/groceries', async (req, res) => {
     let { usermsg, userdetails } = req.body;
 
-    try {
         const client = new OpenAI({
             baseURL: "https://api.ilmu.ai/v1",
             apiKey: process.env.ILMU_API_KEY,
@@ -100,7 +99,7 @@ router.post('/groceries', async (req, res) => {
 
                     There should only be ONE main response, and the number of supplementary response depends on however many are available. If there are supplementary responses, make available "true", if not, make it "false".
                     `
-
+    try {
         const response = await client.chat.completions.create({
             model: "ilmu-glm-5.1",
             messages: [
