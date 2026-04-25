@@ -755,10 +755,12 @@ async function callGemini(usermsg, systemInstructions, userdetails, contextStrin
             contents: usermsg
         });
 
-        const responseText = response.text;
+        const responseText = response.response.text();
         
         try {
-            return JSON.parse(responseText);
+            if (typeof responseText === 'object' && responseText !== null) {
+                return responseText; 
+            }
         } catch (parseErr) {
             return JSON.parse({
                 "main_response": {
