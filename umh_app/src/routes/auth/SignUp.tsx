@@ -26,11 +26,6 @@ export const SignUp: React.FC = () => {
     const [confirmPassword, setConfirmPassword] = useState<string>('');
     const [isLoading, setIsLoading] = useState(false);
     //test
-    const [signUpFormData, setSignUpFormData] = useState({
-        name: '',
-        email: '',
-        password: '',
-    });
 
     const [snackbarConfig, setSnackbarConfig] = useState<{ open: boolean, msg: string, sev: "error" | "success" | "warning" }>({
         open: false,
@@ -118,9 +113,9 @@ export const SignUp: React.FC = () => {
                 setIsLoading(false);
                 triggerLocalSnackbar("Signup unsuccessful: " + data.message, "error");
             }
-        } catch (err: any) {
+        } catch (err) {
             setIsLoading(false);
-            triggerLocalSnackbar("Signup unsuccessful: " + err.message, "error");
+            triggerLocalSnackbar("Signup unsuccessful: " + err, "error");
         }
     }
 
