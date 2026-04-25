@@ -24,6 +24,8 @@ import StorefrontIcon from '@mui/icons-material/Storefront';
 import SetMealIcon from '@mui/icons-material/SetMeal';
 import FamilyRestroomIcon from '@mui/icons-material/FamilyRestroom';
 import AddIcCallIcon from '@mui/icons-material/AddIcCall';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../components/context/AuthContext';
 
 
 const categoryImages: Record<string, string> = {
@@ -40,7 +42,7 @@ const categoryText: Record<string, { header: string, description: string, icons:
     header: "Utilities",
     description: "Stop worrying about high utility bills. Our tool connects your profile with the latest government data to automatically see if you can lower your monthly expenses. We’ll help you check your eligibility for Rebat Elektrik and water subsidies through PADU so you can keep more money in your pocket for your family.",
     icons: [
-      <BoltIcon key="bolt" fontSize="large" />,<WaterDropIcon key="bolt" fontSize="large" />,<EmojiObjectsIcon key="bolt" fontSize="large" />
+      <BoltIcon key="bolt" fontSize="large" />, <WaterDropIcon key="bolt" fontSize="large" />, <EmojiObjectsIcon key="bolt" fontSize="large" />
     ]
   },
   Transportation: {
@@ -48,35 +50,35 @@ const categoryText: Record<string, { header: string, description: string, icons:
     description: "Get moving without the financial stress. We help you navigate monthly fuel assistance via BUDI MADANI and maximize your travel with unlimited transit passes like My50. For students, we make it easy to explore flight subsidies through FLYsiswa, ensuring you get the most out of every journey while keeping your transport costs low.",
 
     icons: [
-      <DirectionsBusIcon key="bus" fontSize="large" />,<TrainIcon key="bus" fontSize="large" />,<LocalGasStationIcon key="bus" fontSize="large" />,
+      <DirectionsBusIcon key="bus" fontSize="large" />, <TrainIcon key="bus" fontSize="large" />, <LocalGasStationIcon key="bus" fontSize="large" />,
     ]
   },
   Healthcare: {
     header: "Healthcare",
     description: "Your health should never be a financial burden. We help you access fully subsidized medical care through Skim Perubatan Madani, ensuring you can visit private clinics for free when you're unwell. Our navigator also checks your eligibility for PEKA B40 health screenings and helps you understand the protection offered by mySalam, so you and your family can get the treatment you need with total peace of mind.",
     icons: [
-      <MedicationIcon key="hospital" fontSize="large" />,<HealingIcon key="hospital" fontSize="large" />,<AccessibleIcon key="hospital" fontSize="large" />,
+      <MedicationIcon key="hospital" fontSize="large" />, <HealingIcon key="hospital" fontSize="large" />, <AccessibleIcon key="hospital" fontSize="large" />,
     ]
   },
   Education: {
     header: "Education",
     description: "Investing in your children’s future shouldn’t be a struggle. We help you secure the support your family needs, from immediate school expenses through Bantuan Awal Persekolahan (BAP) to digital book vouchers for students. Our tool also simplifies the path to higher education by helping you navigate PTPTN applications and repayment options, ensuring that every student has the tools and funding to succeed in their studies.",
     icons: [
-      <SchoolIcon key="school" fontSize="large" />,<LocalLibraryIcon key="school" fontSize="large" />,<SquareFootIcon key="school" fontSize="large" />,
+      <SchoolIcon key="school" fontSize="large" />, <LocalLibraryIcon key="school" fontSize="large" />, <SquareFootIcon key="school" fontSize="large" />,
     ]
   },
   Groceries: {
     header: "Groceries",
     description: "Manage your daily expenses with confidence and ease. We help you track your Sumbangan Asas Rahmah (SARA) credits so you always know exactly how much you have for essential groceries. Our navigator also helps you locate the nearest Jualan Payung Rahmah, connecting you to the best local deals on household items and food, ensuring you get the most value for every Ringgit spent on your family’s needs.",
     icons: [
-      <LocalGroceryStoreIcon key="grocery" fontSize="large" />,<StorefrontIcon key="school" fontSize="large" />,<SetMealIcon key="school" fontSize="large" />,
+      <LocalGroceryStoreIcon key="grocery" fontSize="large" />, <StorefrontIcon key="school" fontSize="large" />, <SetMealIcon key="school" fontSize="large" />,
     ]
   },
   Others: {
     header: "Others",
     description: "Can't find exactly what you’re looking for? Don't worry—we’ve still got you covered. From tracking your Sumbangan Tunai Rahmah (STR) payments and e-Madani digital wallet credits to uncovering hidden income tax reliefs, our platform is built to catch every opportunity. Whether it’s a new government initiative or a niche grant we haven't listed yet, our AI stays updated in real-time to ensure you never miss a chance to strengthen your family's 'Ringgit Resilience'.",
     icons: [
-      <AccountBalanceWalletIcon key="wallet" fontSize="large" />,<AddIcCallIcon key="school" fontSize="large" />,<FamilyRestroomIcon key="school" fontSize="large" />,
+      <AccountBalanceWalletIcon key="wallet" fontSize="large" />, <AddIcCallIcon key="school" fontSize="large" />, <FamilyRestroomIcon key="school" fontSize="large" />,
     ]
   },
 };
@@ -201,15 +203,27 @@ const ThemedGrid = ({ title, onClick }: ThemedGrid) => {
 }
 
 export const Dashboard = () => {
+  const navigate = useNavigate();
+  const { authUser } = useAuth();
+
+  const handleNavigate = (category: string) => {
+
+    if (authUser) {
+      navigate('/chat/' + category);
+    } else {
+      navigate('/signin');    //if logged out or not acc
+    }
+  };
+
   return (
     <Box sx={{ width: '100%', backgroundColor: '#C8E1A0', overflow: 'hidden' }}>
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={{ justifyContent: 'center', alignContent: 'center', mt: 6 }}>
-        <ThemedGrid title={'Utilities'} />
-        <ThemedGrid title={'Transportation'} />
-        <ThemedGrid title={'Healthcare'} />
-        <ThemedGrid title={'Education'} />
-        <ThemedGrid title={'Groceries'} />
-        <ThemedGrid title={'Others'} />
+        <ThemedGrid title={'Utilities'} onClick={() => handleNavigate('utilities')} />
+        <ThemedGrid title={'Transportation'} onClick={() => handleNavigate('transportation')} />
+        <ThemedGrid title={'Healthcare'} onClick={() => handleNavigate('healthcare')} />
+        <ThemedGrid title={'Education'} onClick={() => handleNavigate('education')} />
+        <ThemedGrid title={'Groceries'} onClick={() => handleNavigate('groceries')} />
+        <ThemedGrid title={'Others'} onClick={() => handleNavigate('others')} />
       </Grid>
     </Box>
   )
