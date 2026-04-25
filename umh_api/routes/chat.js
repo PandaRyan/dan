@@ -743,17 +743,17 @@ async function callGemini(usermsg, systemInstructions, userdetails, contextStrin
     `
 
     try {
-        const model = geminiClient.models.generateContent({
+        const response = await geminiClient.models.generateContent({
             model: "gemini-3-flash-preview",
             systemInstruction: completeContext,
             generationConfig: {
                 temperature: 0.6,
                 responseMimeType: "application/json"
-            }
+            },
+            content: usermsg
         });
 
-        const result = await model.generateContent(usermsg);
-        const responseText = result.response.text();
+        const responseText = response.text;
 
         return JSON.parse(responseText);
     } catch (err) {
