@@ -3,7 +3,7 @@ var express = require('express');
 var router = express.Router();
 require('dotenv').config();
 
-import { GoogleGenAI } from "@google/genai";
+const { GoogleGenAI } = require("@google/genai");
 
 const { CloudClient } = require('chromadb');
 const { GoogleGeminiEmbeddingFunction } = require('@chroma-core/google-gemini')
