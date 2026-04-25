@@ -158,7 +158,6 @@ router.post('/groceries', async (req, res) => {
 router.post('/utilities', async (req, res) => {
     let { usermsg, userdetails } = req.body;
 
-    try {
         const client = new OpenAI({
             baseURL: "https://api.ilmu.ai/v1",
             apiKey: process.env.ILMU_API_KEY,
@@ -209,7 +208,7 @@ router.post('/utilities', async (req, res) => {
 
                     There should only be ONE main response, and the number of supplementary response depends on however many are available. If there are supplementary responses, make available "true", if not, make it "false".
                     `
-
+    try {
         const response = await client.chat.completions.create({
             model: "ilmu-glm-5.1",
             messages: [
@@ -266,7 +265,6 @@ router.post('/utilities', async (req, res) => {
 router.post('/transportation', async (req, res) => {
     let { usermsg, userdetails } = req.body;
 
-    try {
         const client = new OpenAI({
             baseURL: "https://api.ilmu.ai/v1",
             apiKey: process.env.ILMU_API_KEY,
@@ -317,7 +315,7 @@ router.post('/transportation', async (req, res) => {
 
                     There should only be ONE main response, and the number of supplementary response depends on however many are available. If there are supplementary responses, make available "true", if not, make it "false".
                     `
-
+    try {
         const response = await client.chat.completions.create({
             model: "ilmu-glm-5.1",
             messages: [
@@ -374,7 +372,6 @@ router.post('/transportation', async (req, res) => {
 router.post('/healthcare', async (req, res) => {
     let { usermsg, userdetails } = req.body;
 
-    try {
         const client = new OpenAI({
             baseURL: "https://api.ilmu.ai/v1",
             apiKey: process.env.ILMU_API_KEY,
@@ -425,7 +422,7 @@ router.post('/healthcare', async (req, res) => {
 
                     There should only be ONE main response, and the number of supplementary response depends on however many are available. If there are supplementary responses, make available "true", if not, make it "false".
                     `
-
+    try {
         const response = await client.chat.completions.create({
             model: "ilmu-glm-5.1",
             messages: [
@@ -482,7 +479,6 @@ router.post('/healthcare', async (req, res) => {
 router.post('/education', async (req, res) => {
     let { usermsg, userdetails } = req.body;
 
-    try {
         const client = new OpenAI({
             baseURL: "https://api.ilmu.ai/v1",
             apiKey: process.env.ILMU_API_KEY,
@@ -533,7 +529,7 @@ router.post('/education', async (req, res) => {
 
                     There should only be ONE main response, and the number of supplementary response depends on however many are available. If there are supplementary responses, make available "true", if not, make it "false".
                     `
-
+    try {
         const response = await client.chat.completions.create({
             model: "ilmu-glm-5.1",
             messages: [
@@ -590,7 +586,6 @@ router.post('/education', async (req, res) => {
 router.post('/others', async (req, res) => {
     let { usermsg, userdetails } = req.body;
 
-    try {
         const client = new OpenAI({
             baseURL: "https://api.ilmu.ai/v1",
             apiKey: process.env.ILMU_API_KEY,
@@ -640,7 +635,7 @@ router.post('/others', async (req, res) => {
 
                     There should only be ONE main response, and the number of supplementary response depends on however many are available. If there are supplementary responses, make available "true", if not, make it "false".
                     `
-
+    try {
         const response = await client.chat.completions.create({
             model: "ilmu-glm-5.1",
             messages: [
