@@ -22,7 +22,7 @@ const chroma = new CloudClient({
 async function retrieveContext(question) {
     try {
         const embedder = new GoogleGeminiEmbeddingFunction({ api_key: GOOGLE_API_KEY });
-        const collection = await chroma.getCollection({ name: COLLECTION_NAME, embeddingFunction: embedder})
+        const collection = await chroma.getCollection({ name: COLLECTION_NAME, embeddingFunction: embedder })
         const results = await collection.query({
             queryTexts: [question],
             nResults: TOP_K,
@@ -39,14 +39,14 @@ async function retrieveContext(question) {
                 });
             }
         }
-        
+
         return hits;
     } catch (err) {
         return err.message;
     }
 }
 
-router.post('/groceries', async(req, res) => {
+router.post('/groceries', async (req, res) => {
     let { usermsg, userdetails } = req.body;
 
     try {
@@ -57,8 +57,6 @@ router.post('/groceries', async(req, res) => {
 
         const hits = await retrieveContext(usermsg);
 
-        console.log(hits) 
-
         if (!Array.isArray(hits)) {
             return res.status(500).json({
                 success: false,
@@ -66,25 +64,18 @@ router.post('/groceries', async(req, res) => {
             })
         }
 
-        const contextParts = hits.map((hit, index) => 
+        const contextParts = hits.map((hit, index) =>
             `[Chunk ${index + 1} | Section: ${hit.metadata.section || 'Unknown'}]\n${hit.text}`
         )
         const contextString = contextParts.join('\n\n---\n\n')
 
-        console.log("before response")
-
-        const response = await client.chat.completions.create({
-            model: "ilmu-glm-5.1",
-            messages: [
-                {
-                    role: "system",
-                    content: 
-                    `
+        const systemInstructions = `
                     You are a helpful assistant for Malaysian government subsidy information. 
                     You specialize in answering questions related to subsidies available for the Malaysian public, with reference to the Malaysia Budget 2026 document.
                     In this specific section, you are focusing on subsidies related to GROCERIES.
                     When answering, you should rely solely on the provided context from the Malaysia Budget 2026 document. Do not make assumptions or use information that is unrelated to the scope. You should tailor your answers to user's specific subsidy available. (Eg: government allocated RM 1 billion, but user only entitled for RM 100, then only mention the RM 100 subsidy in your answer)
-                    If the question is unrelated to Malaysian government subsidies, respond with "I'm sorry, but I can only assist with questions related to Malaysian government subsidies."
+                    If greeted, say "Hey! Ask me anything about Malaysian subsidies!"
+                    Except for greetings, if the question is unrelated to Malaysian government subsidies, respond with "I'm sorry, but I can only assist with questions related to Malaysian government subsidies."
                     If there is no relevant subsidy available for the user's situation, respond with "I'm sorry, but there is no relevant subsidy information available for your query."
                     You will be supplied with context retrieved from the Malaysia Budget 2026 document, which may include information about various subsidies. Your answers should always include the following: Name of the subsidy, a brief description (that includes eligibility criteria and how it relates to the user's situation.)
                     Depending on the level of context available from the Malaysia Budget 2026 document, you are required to meet all criterias as described above, thus, do further research if necessary. However, it is important to NOT provide any made up or assumed information.
@@ -107,104 +98,16 @@ router.post('/groceries', async(req, res) => {
                     }
 
                     There should only be ONE main response, and the number of supplementary response depends on however many are available. If there are supplementary responses, make available "true", if not, make it "false".
-
-                    ###
-                    CONTEXT:
-                    ${contextString}
-
-                    ###
-                    User Details:
-                    Birth Year: ${userdetails.birthYear}
-                    Income Group: ${userdetails.incomeGroup}
-                    State of Residence: ${userdetails.state}
                     `
-                },
-                {
-                    role: "user",
-                    content: usermsg
-                },
-            ],
-            temperature: 0.6,
-            response_format: {"type": "json_object"},
-            max_tokens: 10000
-        })
-
-        let rawResponse = response.choices[0].message.content;
-        rawResponse = rawResponse.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-    
-        const returnResponse = JSON.parse(rawResponse);
-
-        res.status(200).json({returnResponse});
-    } catch(err) {
-        console.log(err)
-        res.status(500).json({
-            success: false,
-            error: err.message
-        })
-    }
-})
-
-router.post('/utilities', async(req, res) => {
-let { usermsg, userdetails } = req.body;
-
-    try {
-        const client = new OpenAI({
-            baseURL: "https://api.ilmu.ai/v1",
-            apiKey: process.env.ILMU_API_KEY
-        })
-
-        const hits = await retrieveContext(usermsg);
-
-        console.log(hits) 
-
-        if (!Array.isArray(hits)) {
-            return res.status(500).json({
-                success: false,
-                error: "Failed to retrieve context from Chroma Cloud"
-            })
-        }
-
-        const contextParts = hits.map((hit, index) => 
-            `[Chunk ${index + 1} | Section: ${hit.metadata.section || 'Unknown'}]\n${hit.text}`
-        )
-        const contextString = contextParts.join('\n\n---\n\n')
-
-        console.log("before response")
 
         const response = await client.chat.completions.create({
             model: "ilmu-glm-5.1",
             messages: [
                 {
                     role: "system",
-                    content: 
-                    `
-                    You are a helpful assistant for Malaysian government subsidy information. 
-                    You specialize in answering questions related to subsidies available for the Malaysian public, with reference to the Malaysia Budget 2026 document.
-                    In this specific section, you are focusing on subsidies related to UTILITIES.
-                    When answering, you should rely solely on the provided context from the Malaysia Budget 2026 document. Do not make assumptions or use information that is unrelated to the scope. You should tailor your answers to user's specific subsidy available. (Eg: government allocated RM 1 billion, but user only entitled for RM 100, then only mention the RM 100 subsidy in your answer)
-                    If the question is unrelated to Malaysian government subsidies, respond with "I'm sorry, but I can only assist with questions related to Malaysian government subsidies."
-                    If there is no relevant subsidy available for the user's situation, respond with "I'm sorry, but there is no relevant subsidy information available for your query."
-                    You will be supplied with context retrieved from the Malaysia Budget 2026 document, which may include information about various subsidies. Your answers should always include the following: Name of the subsidy, a brief description (that includes eligibility criteria and how it relates to the user's situation.)
-                    Depending on the level of context available from the Malaysia Budget 2026 document, you are required to meet all criterias as described above, thus, do further research if necessary. However, it is important to NOT provide any made up or assumed information.
-                    You will also be supplied with the user's simple profile, which includes their age, income group (B40, M40, T20), and state of residence. Use this information to determine whether they are eligible for the subsidies you recommend. By default, assume that the user is a consumer, unless otherwise stated in their question.
-
-                    You are to strictly respond in a JSON format as follows:
-                    {
-                        "main_response": {
-                            "subsidy_name": 
-                            "description":
-                        }
-
-                        "supplementary_response": {
-                            "available": "true"/"false"
-                            {
-                                "subsidy_name":
-                                "description":
-                            }
-                        }
-                    }
-
-                    There should only be ONE main response, and the number of supplementary response depends on however many are available. If there are supplementary responses, make available "true", if not, make it "false".
+                    content:
+                        `
+                    ${systemInstructions}
 
                     ###
                     CONTEXT:
@@ -213,7 +116,7 @@ let { usermsg, userdetails } = req.body;
                     ###
                     User Details:
                     Birth Year: ${userdetails.birthYear}
-                    Income Group: ${userdetails.incomeGroup}
+                    Income Category: ${userdetails.incomeCategory}
                     State of Residence: ${userdetails.state}
                     `
                 },
@@ -223,26 +126,34 @@ let { usermsg, userdetails } = req.body;
                 },
             ],
             temperature: 0.6,
-            response_format: {"type": "json_object"},
+            response_format: { "type": "json_object" },
             max_tokens: 10000
         })
 
         let rawResponse = response.choices[0].message.content;
         rawResponse = rawResponse.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-    
+
         const returnResponse = JSON.parse(rawResponse);
 
-        res.status(200).json({returnResponse});
-    } catch(err) {
+        res.status(200).json({ returnResponse });
+    } catch (err) {
+        console.log("Trigger Gemini fallback")
         console.log(err)
-        res.status(500).json({
-            success: false,
-            error: err.message
-        })
+        try {
+            const geminiResponse = await callGemini(usermsg, systemInstructions, userdetails, contextString);
+
+            res.status(200).json({ returnResponse: geminiResponse });
+
+        } catch (errg) {
+            res.status(500).json({
+                success: false,
+                error: "Z.AI and Gemini failed: " + errg.message
+            })
+        }
     }
 })
 
-router.post('/transportation', async(req, res) => {
+router.post('/utilities', async (req, res) => {
     let { usermsg, userdetails } = req.body;
 
     try {
@@ -253,8 +164,6 @@ router.post('/transportation', async(req, res) => {
 
         const hits = await retrieveContext(usermsg);
 
-        console.log(hits) 
-
         if (!Array.isArray(hits)) {
             return res.status(500).json({
                 success: false,
@@ -262,25 +171,18 @@ router.post('/transportation', async(req, res) => {
             })
         }
 
-        const contextParts = hits.map((hit, index) => 
+        const contextParts = hits.map((hit, index) =>
             `[Chunk ${index + 1} | Section: ${hit.metadata.section || 'Unknown'}]\n${hit.text}`
         )
         const contextString = contextParts.join('\n\n---\n\n')
 
-        console.log("before response")
-
-        const response = await client.chat.completions.create({
-            model: "ilmu-glm-5.1",
-            messages: [
-                {
-                    role: "system",
-                    content: 
-                    `
+        const systemInstructions = `
                     You are a helpful assistant for Malaysian government subsidy information. 
                     You specialize in answering questions related to subsidies available for the Malaysian public, with reference to the Malaysia Budget 2026 document.
-                    In this specific section, you are focusing on subsidies related to TRANSPORTATION.
+                    In this specific section, you are focusing on subsidies related to GROCERIES.
                     When answering, you should rely solely on the provided context from the Malaysia Budget 2026 document. Do not make assumptions or use information that is unrelated to the scope. You should tailor your answers to user's specific subsidy available. (Eg: government allocated RM 1 billion, but user only entitled for RM 100, then only mention the RM 100 subsidy in your answer)
-                    If the question is unrelated to Malaysian government subsidies, respond with "I'm sorry, but I can only assist with questions related to Malaysian government subsidies."
+                    If greeted, say "Hey! Ask me anything about Malaysian subsidies!"
+                    Except for greetings, if the question is unrelated to Malaysian government subsidies, respond with "I'm sorry, but I can only assist with questions related to Malaysian government subsidies."
                     If there is no relevant subsidy available for the user's situation, respond with "I'm sorry, but there is no relevant subsidy information available for your query."
                     You will be supplied with context retrieved from the Malaysia Budget 2026 document, which may include information about various subsidies. Your answers should always include the following: Name of the subsidy, a brief description (that includes eligibility criteria and how it relates to the user's situation.)
                     Depending on the level of context available from the Malaysia Budget 2026 document, you are required to meet all criterias as described above, thus, do further research if necessary. However, it is important to NOT provide any made up or assumed information.
@@ -303,6 +205,16 @@ router.post('/transportation', async(req, res) => {
                     }
 
                     There should only be ONE main response, and the number of supplementary response depends on however many are available. If there are supplementary responses, make available "true", if not, make it "false".
+                    `
+
+        const response = await client.chat.completions.create({
+            model: "ilmu-glm-5.1",
+            messages: [
+                {
+                    role: "system",
+                    content:
+                        `
+                    ${systemInstructions}
 
                     ###
                     CONTEXT:
@@ -311,7 +223,7 @@ router.post('/transportation', async(req, res) => {
                     ###
                     User Details:
                     Birth Year: ${userdetails.birthYear}
-                    Income Group: ${userdetails.incomeGroup}
+                    Income Category: ${userdetails.incomeCategory}
                     State of Residence: ${userdetails.state}
                     `
                 },
@@ -321,26 +233,34 @@ router.post('/transportation', async(req, res) => {
                 },
             ],
             temperature: 0.6,
-            response_format: {"type": "json_object"},
+            response_format: { "type": "json_object" },
             max_tokens: 10000
         })
 
         let rawResponse = response.choices[0].message.content;
         rawResponse = rawResponse.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-    
+
         const returnResponse = JSON.parse(rawResponse);
 
-        res.status(200).json({returnResponse});
-    } catch(err) {
+        res.status(200).json({ returnResponse });
+    } catch (err) {
+        console.log("Trigger Gemini fallback")
         console.log(err)
-        res.status(500).json({
-            success: false,
-            error: err.message
-        })
+        try {
+            const geminiResponse = await callGemini(usermsg, systemInstructions, userdetails, contextString);
+
+            res.status(200).json({ returnResponse: geminiResponse });
+
+        } catch (errg) {
+            res.status(500).json({
+                success: false,
+                error: "Z.AI and Gemini failed: " + errg.message
+            })
+        }
     }
 })
 
-router.post('/healthcare', async(req, res) => {
+router.post('/transportation', async (req, res) => {
     let { usermsg, userdetails } = req.body;
 
     try {
@@ -351,8 +271,6 @@ router.post('/healthcare', async(req, res) => {
 
         const hits = await retrieveContext(usermsg);
 
-        console.log(hits) 
-
         if (!Array.isArray(hits)) {
             return res.status(500).json({
                 success: false,
@@ -360,25 +278,18 @@ router.post('/healthcare', async(req, res) => {
             })
         }
 
-        const contextParts = hits.map((hit, index) => 
+        const contextParts = hits.map((hit, index) =>
             `[Chunk ${index + 1} | Section: ${hit.metadata.section || 'Unknown'}]\n${hit.text}`
         )
         const contextString = contextParts.join('\n\n---\n\n')
 
-        console.log("before response")
-
-        const response = await client.chat.completions.create({
-            model: "ilmu-glm-5.1",
-            messages: [
-                {
-                    role: "system",
-                    content: 
-                    `
+        const systemInstructions = `
                     You are a helpful assistant for Malaysian government subsidy information. 
                     You specialize in answering questions related to subsidies available for the Malaysian public, with reference to the Malaysia Budget 2026 document.
-                    In this specific section, you are focusing on subsidies related to HEALTHCARE.
+                    In this specific section, you are focusing on subsidies related to GROCERIES.
                     When answering, you should rely solely on the provided context from the Malaysia Budget 2026 document. Do not make assumptions or use information that is unrelated to the scope. You should tailor your answers to user's specific subsidy available. (Eg: government allocated RM 1 billion, but user only entitled for RM 100, then only mention the RM 100 subsidy in your answer)
-                    If the question is unrelated to Malaysian government subsidies, respond with "I'm sorry, but I can only assist with questions related to Malaysian government subsidies."
+                    If greeted, say "Hey! Ask me anything about Malaysian subsidies!"
+                    Except for greetings, if the question is unrelated to Malaysian government subsidies, respond with "I'm sorry, but I can only assist with questions related to Malaysian government subsidies."
                     If there is no relevant subsidy available for the user's situation, respond with "I'm sorry, but there is no relevant subsidy information available for your query."
                     You will be supplied with context retrieved from the Malaysia Budget 2026 document, which may include information about various subsidies. Your answers should always include the following: Name of the subsidy, a brief description (that includes eligibility criteria and how it relates to the user's situation.)
                     Depending on the level of context available from the Malaysia Budget 2026 document, you are required to meet all criterias as described above, thus, do further research if necessary. However, it is important to NOT provide any made up or assumed information.
@@ -401,6 +312,16 @@ router.post('/healthcare', async(req, res) => {
                     }
 
                     There should only be ONE main response, and the number of supplementary response depends on however many are available. If there are supplementary responses, make available "true", if not, make it "false".
+                    `
+
+        const response = await client.chat.completions.create({
+            model: "ilmu-glm-5.1",
+            messages: [
+                {
+                    role: "system",
+                    content:
+                        `
+                    ${systemInstructions}
 
                     ###
                     CONTEXT:
@@ -409,7 +330,7 @@ router.post('/healthcare', async(req, res) => {
                     ###
                     User Details:
                     Birth Year: ${userdetails.birthYear}
-                    Income Group: ${userdetails.incomeGroup}
+                    Income Category: ${userdetails.incomeCategory}
                     State of Residence: ${userdetails.state}
                     `
                 },
@@ -419,26 +340,34 @@ router.post('/healthcare', async(req, res) => {
                 },
             ],
             temperature: 0.6,
-            response_format: {"type": "json_object"},
+            response_format: { "type": "json_object" },
             max_tokens: 10000
         })
 
         let rawResponse = response.choices[0].message.content;
         rawResponse = rawResponse.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-    
+
         const returnResponse = JSON.parse(rawResponse);
 
-        res.status(200).json({returnResponse});
-    } catch(err) {
+        res.status(200).json({ returnResponse });
+    } catch (err) {
+        console.log("Trigger Gemini fallback")
         console.log(err)
-        res.status(500).json({
-            success: false,
-            error: err.message
-        })
+        try {
+            const geminiResponse = await callGemini(usermsg, systemInstructions, userdetails, contextString);
+
+            res.status(200).json({ returnResponse: geminiResponse });
+
+        } catch (errg) {
+            res.status(500).json({
+                success: false,
+                error: "Z.AI and Gemini failed: " + errg.message
+            })
+        }
     }
 })
 
-router.post('/education', async(req, res) => {
+router.post('/healthcare', async (req, res) => {
     let { usermsg, userdetails } = req.body;
 
     try {
@@ -449,8 +378,6 @@ router.post('/education', async(req, res) => {
 
         const hits = await retrieveContext(usermsg);
 
-        console.log(hits) 
-
         if (!Array.isArray(hits)) {
             return res.status(500).json({
                 success: false,
@@ -458,25 +385,18 @@ router.post('/education', async(req, res) => {
             })
         }
 
-        const contextParts = hits.map((hit, index) => 
+        const contextParts = hits.map((hit, index) =>
             `[Chunk ${index + 1} | Section: ${hit.metadata.section || 'Unknown'}]\n${hit.text}`
         )
         const contextString = contextParts.join('\n\n---\n\n')
 
-        console.log("before response")
-
-        const response = await client.chat.completions.create({
-            model: "ilmu-glm-5.1",
-            messages: [
-                {
-                    role: "system",
-                    content: 
-                    `
+        const systemInstructions = `
                     You are a helpful assistant for Malaysian government subsidy information. 
                     You specialize in answering questions related to subsidies available for the Malaysian public, with reference to the Malaysia Budget 2026 document.
-                    In this specific section, you are focusing on subsidies related to EDUCATION.
+                    In this specific section, you are focusing on subsidies related to GROCERIES.
                     When answering, you should rely solely on the provided context from the Malaysia Budget 2026 document. Do not make assumptions or use information that is unrelated to the scope. You should tailor your answers to user's specific subsidy available. (Eg: government allocated RM 1 billion, but user only entitled for RM 100, then only mention the RM 100 subsidy in your answer)
-                    If the question is unrelated to Malaysian government subsidies, respond with "I'm sorry, but I can only assist with questions related to Malaysian government subsidies."
+                    If greeted, say "Hey! Ask me anything about Malaysian subsidies!"
+                    Except for greetings, if the question is unrelated to Malaysian government subsidies, respond with "I'm sorry, but I can only assist with questions related to Malaysian government subsidies."
                     If there is no relevant subsidy available for the user's situation, respond with "I'm sorry, but there is no relevant subsidy information available for your query."
                     You will be supplied with context retrieved from the Malaysia Budget 2026 document, which may include information about various subsidies. Your answers should always include the following: Name of the subsidy, a brief description (that includes eligibility criteria and how it relates to the user's situation.)
                     Depending on the level of context available from the Malaysia Budget 2026 document, you are required to meet all criterias as described above, thus, do further research if necessary. However, it is important to NOT provide any made up or assumed information.
@@ -499,6 +419,16 @@ router.post('/education', async(req, res) => {
                     }
 
                     There should only be ONE main response, and the number of supplementary response depends on however many are available. If there are supplementary responses, make available "true", if not, make it "false".
+                    `
+
+        const response = await client.chat.completions.create({
+            model: "ilmu-glm-5.1",
+            messages: [
+                {
+                    role: "system",
+                    content:
+                        `
+                    ${systemInstructions}
 
                     ###
                     CONTEXT:
@@ -507,7 +437,7 @@ router.post('/education', async(req, res) => {
                     ###
                     User Details:
                     Birth Year: ${userdetails.birthYear}
-                    Income Group: ${userdetails.incomeGroup}
+                    Income Category: ${userdetails.incomeCategory}
                     State of Residence: ${userdetails.state}
                     `
                 },
@@ -517,27 +447,35 @@ router.post('/education', async(req, res) => {
                 },
             ],
             temperature: 0.6,
-            response_format: {"type": "json_object"},
+            response_format: { "type": "json_object" },
             max_tokens: 10000
         })
 
         let rawResponse = response.choices[0].message.content;
         rawResponse = rawResponse.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-    
+
         const returnResponse = JSON.parse(rawResponse);
 
-        res.status(200).json({returnResponse});
-    } catch(err) {
+        res.status(200).json({ returnResponse });
+    } catch (err) {
+        console.log("Trigger Gemini fallback")
         console.log(err)
-        res.status(500).json({
-            success: false,
-            error: err.message
-        })
+        try {
+            const geminiResponse = await callGemini(usermsg, systemInstructions, userdetails, contextString);
+
+            res.status(200).json({ returnResponse: geminiResponse });
+
+        } catch (errg) {
+            res.status(500).json({
+                success: false,
+                error: "Z.AI and Gemini failed: " + errg.message
+            })
+        }
     }
 })
 
-router.post('/others', async(req, res) => {
-let { usermsg, userdetails } = req.body;
+router.post('/education', async (req, res) => {
+    let { usermsg, userdetails } = req.body;
 
     try {
         const client = new OpenAI({
@@ -547,8 +485,6 @@ let { usermsg, userdetails } = req.body;
 
         const hits = await retrieveContext(usermsg);
 
-        console.log(hits) 
-
         if (!Array.isArray(hits)) {
             return res.status(500).json({
                 success: false,
@@ -556,24 +492,18 @@ let { usermsg, userdetails } = req.body;
             })
         }
 
-        const contextParts = hits.map((hit, index) => 
+        const contextParts = hits.map((hit, index) =>
             `[Chunk ${index + 1} | Section: ${hit.metadata.section || 'Unknown'}]\n${hit.text}`
         )
         const contextString = contextParts.join('\n\n---\n\n')
 
-        console.log("before response")
-
-        const response = await client.chat.completions.create({
-            model: "ilmu-glm-5.1",
-            messages: [
-                {
-                    role: "system",
-                    content: 
-                    `
+        const systemInstructions = `
                     You are a helpful assistant for Malaysian government subsidy information. 
                     You specialize in answering questions related to subsidies available for the Malaysian public, with reference to the Malaysia Budget 2026 document.
+                    In this specific section, you are focusing on subsidies related to GROCERIES.
                     When answering, you should rely solely on the provided context from the Malaysia Budget 2026 document. Do not make assumptions or use information that is unrelated to the scope. You should tailor your answers to user's specific subsidy available. (Eg: government allocated RM 1 billion, but user only entitled for RM 100, then only mention the RM 100 subsidy in your answer)
-                    If the question is unrelated to Malaysian government subsidies, respond with "I'm sorry, but I can only assist with questions related to Malaysian government subsidies."
+                    If greeted, say "Hey! Ask me anything about Malaysian subsidies!"
+                    Except for greetings, if the question is unrelated to Malaysian government subsidies, respond with "I'm sorry, but I can only assist with questions related to Malaysian government subsidies."
                     If there is no relevant subsidy available for the user's situation, respond with "I'm sorry, but there is no relevant subsidy information available for your query."
                     You will be supplied with context retrieved from the Malaysia Budget 2026 document, which may include information about various subsidies. Your answers should always include the following: Name of the subsidy, a brief description (that includes eligibility criteria and how it relates to the user's situation.)
                     Depending on the level of context available from the Malaysia Budget 2026 document, you are required to meet all criterias as described above, thus, do further research if necessary. However, it is important to NOT provide any made up or assumed information.
@@ -596,6 +526,16 @@ let { usermsg, userdetails } = req.body;
                     }
 
                     There should only be ONE main response, and the number of supplementary response depends on however many are available. If there are supplementary responses, make available "true", if not, make it "false".
+                    `
+
+        const response = await client.chat.completions.create({
+            model: "ilmu-glm-5.1",
+            messages: [
+                {
+                    role: "system",
+                    content:
+                        `
+                    ${systemInstructions}
 
                     ###
                     CONTEXT:
@@ -604,7 +544,7 @@ let { usermsg, userdetails } = req.body;
                     ###
                     User Details:
                     Birth Year: ${userdetails.birthYear}
-                    Income Group: ${userdetails.incomeGroup}
+                    Income Category: ${userdetails.incomeCategory}
                     State of Residence: ${userdetails.state}
                     `
                 },
@@ -614,26 +554,141 @@ let { usermsg, userdetails } = req.body;
                 },
             ],
             temperature: 0.6,
-            response_format: {"type": "json_object"},
+            response_format: { "type": "json_object" },
             max_tokens: 10000
         })
 
         let rawResponse = response.choices[0].message.content;
         rawResponse = rawResponse.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-    
+
         const returnResponse = JSON.parse(rawResponse);
 
-        res.status(200).json({returnResponse});
-    } catch(err) {
+        res.status(200).json({ returnResponse });
+    } catch (err) {
+        console.log("Trigger Gemini fallback")
         console.log(err)
-        res.status(500).json({
-            success: false,
-            error: err.message
-        })
+        try {
+            const geminiResponse = await callGemini(usermsg, systemInstructions, userdetails, contextString);
+
+            res.status(200).json({ returnResponse: geminiResponse });
+
+        } catch (errg) {
+            res.status(500).json({
+                success: false,
+                error: "Z.AI and Gemini failed: " + errg.message
+            })
+        }
     }
 })
 
-router.post('/test', async(req, res) => {
+router.post('/others', async (req, res) => {
+    let { usermsg, userdetails } = req.body;
+
+    try {
+        const client = new OpenAI({
+            baseURL: "https://api.ilmu.ai/v1",
+            apiKey: process.env.ILMU_API_KEY
+        })
+
+        const hits = await retrieveContext(usermsg);
+
+        if (!Array.isArray(hits)) {
+            return res.status(500).json({
+                success: false,
+                error: "Failed to retrieve context from Chroma Cloud"
+            })
+        }
+
+        const contextParts = hits.map((hit, index) =>
+            `[Chunk ${index + 1} | Section: ${hit.metadata.section || 'Unknown'}]\n${hit.text}`
+        )
+        const contextString = contextParts.join('\n\n---\n\n')
+
+        const systemInstructions = `
+                    You are a helpful assistant for Malaysian government subsidy information. 
+                    You specialize in answering questions related to subsidies available for the Malaysian public, with reference to the Malaysia Budget 2026 document.
+                    In this specific section, you are focusing on subsidies related to GROCERIES.
+                    When answering, you should rely solely on the provided context from the Malaysia Budget 2026 document. Do not make assumptions or use information that is unrelated to the scope. You should tailor your answers to user's specific subsidy available. (Eg: government allocated RM 1 billion, but user only entitled for RM 100, then only mention the RM 100 subsidy in your answer)
+                    If greeted, say "Hey! Ask me anything about Malaysian subsidies!"
+                    Except for greetings, if the question is unrelated to Malaysian government subsidies, respond with "I'm sorry, but I can only assist with questions related to Malaysian government subsidies."
+                    If there is no relevant subsidy available for the user's situation, respond with "I'm sorry, but there is no relevant subsidy information available for your query."
+                    You will be supplied with context retrieved from the Malaysia Budget 2026 document, which may include information about various subsidies. Your answers should always include the following: Name of the subsidy, a brief description (that includes eligibility criteria and how it relates to the user's situation.)
+                    Depending on the level of context available from the Malaysia Budget 2026 document, you are required to meet all criterias as described above, thus, do further research if necessary. However, it is important to NOT provide any made up or assumed information.
+                    You will also be supplied with the user's simple profile, which includes their age, income group (B40, M40, T20), and state of residence. Use this information to determine whether they are eligible for the subsidies you recommend. By default, assume that the user is a consumer, unless otherwise stated in their question.
+
+                    You are to strictly respond in a JSON format as follows:
+                    {
+                        "main_response": {
+                            "subsidy_name": 
+                            "description":
+                        }
+
+                        "supplementary_response": {
+                            "available": "true"/"false"
+                            {
+                                "subsidy_name":
+                                "description":
+                            }
+                        }
+                    }
+
+                    There should only be ONE main response, and the number of supplementary response depends on however many are available. If there are supplementary responses, make available "true", if not, make it "false".
+                    `
+
+        const response = await client.chat.completions.create({
+            model: "ilmu-glm-5.1",
+            messages: [
+                {
+                    role: "system",
+                    content:
+                        `
+                    ${systemInstructions}
+
+                    ###
+                    CONTEXT:
+                    ${contextString}
+
+                    ###
+                    User Details:
+                    Birth Year: ${userdetails.birthYear}
+                    Income Category: ${userdetails.incomeCategory}
+                    State of Residence: ${userdetails.state}
+                    `
+                },
+                {
+                    role: "user",
+                    content: usermsg
+                },
+            ],
+            temperature: 0.6,
+            response_format: { "type": "json_object" },
+            max_tokens: 10000
+        })
+
+        let rawResponse = response.choices[0].message.content;
+        rawResponse = rawResponse.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+
+        const returnResponse = JSON.parse(rawResponse);
+
+        res.status(200).json({ returnResponse });
+    } catch (err) {
+        console.log("Trigger Gemini fallback")
+        console.log(err)
+        try {
+            const geminiResponse = await callGemini(usermsg, systemInstructions, userdetails, contextString);
+
+            res.status(200).json({ returnResponse: geminiResponse });
+
+        } catch (errg) {
+            res.status(500).json({
+                success: false,
+                error: "Z.AI and Gemini failed: " + errg.message
+            })
+        }
+    }
+})
+
+router.post('/test', async (req, res) => {
     let { usermsg } = req.body;
 
     try {
@@ -658,7 +713,7 @@ router.post('/test', async(req, res) => {
         })
 
         res.json(response);
-    } catch(err) {
+    } catch (err) {
         console.log(err)
         res.status(500).json({
             success: false,
@@ -666,6 +721,43 @@ router.post('/test', async(req, res) => {
         })
     }
 })
+
+async function callGemini(usermsg, systemInstructions, userdetails, contextString) {
+
+    const geminiClient = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
+
+    const completeContext = `
+    ${systemInstructions}
+
+    ###
+    CONTEXT:
+    ${contextString}
+
+    ###
+    User Details:
+    Birth Year: ${userdetails.birthYear}
+    Income Category: ${userdetails.incomeCategory}
+    State of Residence: ${userdetails.state}
+    `
+
+    try {
+        const model = geminiClient.getGenerativeModel({
+            model: "gemini-3-flash-preview",
+            systemInstruction: completeContext,
+            generationConfig: {
+                temperature: 0.6,
+                responseMimeType: "application/json"
+            }
+        });
+
+        const result = await model.generateContent(usermsg);
+        const responseText = result.response.text();
+
+        return JSON.parse(responseText);
+    } catch (err) {
+        console.error("Gemini error: " + err);
+    }
+}
 
 
 module.exports = router;
