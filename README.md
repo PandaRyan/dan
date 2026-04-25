@@ -11,8 +11,7 @@
 [![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?style=for-the-badge&logo=mongodb)](https://www.mongodb.com/)
 [![Vercel](https://img.shields.io/badge/Deployed-Vercel-000000?style=for-the-badge&logo=vercel)](https://vercel.com/)
 
-[DOCUMENTATIONS](https://drive.google.com/drive/folders/1H6aPB0bDB3UU3MiYefxOctcI_WoopRpo?usp=sharing)
-[PITCHING VIDEO](https://google.com)
+[DOCUMENTATIONS](https://drive.google.com/drive/folders/1H6aPB0bDB3UU3MiYefxOctcI_WoopRpo?usp=sharing) · [PITCHING VIDEO](https://drive.google.com/file/d/1jUMhGHTD-LS9sdzb5ibSxvH2wnuYsH0V/view?usp=sharing) · [PITCH DECK](https://drive.google.com/file/d/1Hvj73iBpg7gntighfA_WhUUkdisAOK08/view?usp=sharing)
 
 </div>
 
