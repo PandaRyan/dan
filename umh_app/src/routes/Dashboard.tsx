@@ -25,6 +25,7 @@ import SetMealIcon from '@mui/icons-material/SetMeal';
 import FamilyRestroomIcon from '@mui/icons-material/FamilyRestroom';
 import AddIcCallIcon from '@mui/icons-material/AddIcCall';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../components/context/AuthContext';
 
 
 const categoryImages: Record<string, string> = {
@@ -203,38 +204,26 @@ const ThemedGrid = ({ title, onClick }: ThemedGrid) => {
 
 export const Dashboard = () => {
   const navigate = useNavigate();
+  const { authUser } = useAuth();
 
-  const handleCardClick = (category: string) => {   // Navigate to the chat page for the selected category
-    navigate('/chat/' + category.toLowerCase());    // Convert category to lowercase
+  const handleNavigate = (category: string) => {
+
+    if (authUser) {
+      navigate('/chat/' + category);
+    } else {
+      navigate('/signin');    //if logged out or not acc
+    }
   };
 
   return (
     <Box sx={{ width: '100%', backgroundColor: '#C8E1A0', overflow: 'hidden' }}>
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={{ justifyContent: 'center', alignContent: 'center', mt: 6 }}>
-        <ThemedGrid
-          title={'Utilities'}
-          onClick={() => handleNavigate("utilities")}
-        />
-        <ThemedGrid
-          title={'Transportation'}
-          onClick={() => handleNavigate("transportation")}
-        />
-        <ThemedGrid
-          title={'Healthcare'}
-          onClick={() => handleNavigate("healthcare")}
-        />
-        <ThemedGrid
-          title={'Education'}
-          onClick={() => handleNavigate("education")}
-        />
-        <ThemedGrid
-          title={'Groceries'}
-          onClick={() => handleNavigate("groceries")}
-        />
-        <ThemedGrid
-          title={'Others'}
-          onClick={() => handleNavigate("others")}
-        />
+        <ThemedGrid title={'Utilities'} onClick={() => handleNavigate('utilities')} />
+        <ThemedGrid title={'Transportation'} onClick={() => handleNavigate('transportation')} />
+        <ThemedGrid title={'Healthcare'} onClick={() => handleNavigate('healthcare')} />
+        <ThemedGrid title={'Education'} onClick={() => handleNavigate('education')} />
+        <ThemedGrid title={'Groceries'} onClick={() => handleNavigate('groceries')} />
+        <ThemedGrid title={'Others'} onClick={() => handleNavigate('others')} />
       </Grid>
     </Box>
   )
