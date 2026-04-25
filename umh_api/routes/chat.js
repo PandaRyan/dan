@@ -52,7 +52,8 @@ router.post('/groceries', async (req, res) => {
     try {
         const client = new OpenAI({
             baseURL: "https://api.ilmu.ai/v1",
-            apiKey: process.env.ILMU_API_KEY
+            apiKey: process.env.ILMU_API_KEY,
+            timeout: 30000
         })
 
         const hits = await retrieveContext(usermsg);
@@ -159,7 +160,8 @@ router.post('/utilities', async (req, res) => {
     try {
         const client = new OpenAI({
             baseURL: "https://api.ilmu.ai/v1",
-            apiKey: process.env.ILMU_API_KEY
+            apiKey: process.env.ILMU_API_KEY,
+            timeout: 30000
         })
 
         const hits = await retrieveContext(usermsg);
@@ -266,7 +268,8 @@ router.post('/transportation', async (req, res) => {
     try {
         const client = new OpenAI({
             baseURL: "https://api.ilmu.ai/v1",
-            apiKey: process.env.ILMU_API_KEY
+            apiKey: process.env.ILMU_API_KEY,
+            timeout: 30000
         })
 
         const hits = await retrieveContext(usermsg);
@@ -373,7 +376,8 @@ router.post('/healthcare', async (req, res) => {
     try {
         const client = new OpenAI({
             baseURL: "https://api.ilmu.ai/v1",
-            apiKey: process.env.ILMU_API_KEY
+            apiKey: process.env.ILMU_API_KEY,
+            timeout: 30000
         })
 
         const hits = await retrieveContext(usermsg);
@@ -480,7 +484,8 @@ router.post('/education', async (req, res) => {
     try {
         const client = new OpenAI({
             baseURL: "https://api.ilmu.ai/v1",
-            apiKey: process.env.ILMU_API_KEY
+            apiKey: process.env.ILMU_API_KEY,
+            timeout: 30000
         })
 
         const hits = await retrieveContext(usermsg);
@@ -587,7 +592,8 @@ router.post('/others', async (req, res) => {
     try {
         const client = new OpenAI({
             baseURL: "https://api.ilmu.ai/v1",
-            apiKey: process.env.ILMU_API_KEY
+            apiKey: process.env.ILMU_API_KEY,
+            timeout: 30000
         })
 
         const hits = await retrieveContext(usermsg);
@@ -693,7 +699,8 @@ router.post('/test', async (req, res) => {
     try {
         const client = new OpenAI({
             baseURL: "https://api.ilmu.ai/v1",
-            apiKey: process.env.ILMU_API_KEY
+            apiKey: process.env.ILMU_API_KEY,
+            timeout: 30000
         })
 
         const response = await client.chat.completions.create({
