@@ -3,6 +3,8 @@ var express = require('express');
 var router = express.Router();
 require('dotenv').config();
 
+import { GoogleGenAI } from "@google/genai";
+
 const { CloudClient } = require('chromadb');
 const { GoogleGeminiEmbeddingFunction } = require('@chroma-core/google-gemini')
 const CHROMA_TENANT = process.env.CHROMA_TENANT
@@ -729,7 +731,7 @@ router.post('/test', async (req, res) => {
 
 async function callGemini(usermsg, systemInstructions, userdetails, contextString) {
 
-    const geminiClient = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
+    const geminiClient = new GoogleGenAI({api_key: GOOGLE_API_KEY});
 
     const completeContext = `
     ${systemInstructions}

@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@chroma-core/google-gemini": "^0.1.10",
+    "@google/genai": "^1.50.1",
     "bcryptjs": "^3.0.3",
     "chromadb": "^3.4.3",
     "cookie-parser": "~1.4.4",
