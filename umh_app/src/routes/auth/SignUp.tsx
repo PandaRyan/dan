@@ -75,54 +75,52 @@ export const SignUp: React.FC = () => {
 
     const handleNext = async (event: React.FormEvent) => {
         event.preventDefault();
-
         setIsLoading(true);
 
         try {
             if (name === '') {
-                triggerLocalSnackbar("Name cannot be empty", "error")
-                setIsLoading(false);        //if validation fail
+                triggerLocalSnackbar("Name cannot be empty", "error");
+                setIsLoading(false);
                 return;
-            } else {
-                setSignUpFormData(prev => ({ ...prev, name }));
-
             }
 
             if (!validateEmail(email)) {
-                triggerLocalSnackbar("Invalid email", "error")
+                triggerLocalSnackbar("Invalid email", "error");
                 setIsLoading(false);
-                return;
-            } else {
-                setSignUpFormData(prev => ({ ...prev, email }));
-            }
-
-            if (password === confirmPassword && password !== '') {
-                setSignUpFormData(prev => ({ ...prev, password }));
-                setIsLoading(false);
-            } else {
-                triggerLocalSnackbar("Password mismatch", "error")
                 return;
             }
 
-            const response = await fetch('api/auth/signup', {
+            if (password === '' || password !== confirmPassword) {
+                triggerLocalSnackbar("Password mismatch or empty", "error");
+                setIsLoading(false);
+                return;
+            }
+
+            const payloadToSend = {
+                name: name,
+                email: email,
+                password: password
+            };
+
+            const response = await fetch('/api/auth/signup', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(signUpFormData)
+                body: JSON.stringify(payloadToSend)
             });
 
             const data = await response.json();
 
             if (data.status === "success") {
-                triggerSnackbar("Signup successful!", "success")
+                triggerSnackbar("Signup successful!", "success");
                 await UserContextLogin({ token: data.token, name: data.name });
                 navigate('/signup/onboarding');
             } else {
-                setIsLoading(false);            //error on api
-                triggerLocalSnackbar("Signup unsuccessful: " + data.message, "error")
+                setIsLoading(false);
+                triggerLocalSnackbar("Signup unsuccessful: " + data.message, "error");
             }
-        } catch (err) {
-            setIsLoading(false);            //network error
-            triggerLocalSnackbar("Signup unsuccessful: " + err, "error")
+        } catch (err: any) {
+            setIsLoading(false);
+            triggerLocalSnackbar("Signup unsuccessful: " + err.message, "error");
         }
     }
 
@@ -241,7 +239,6 @@ export const Onboarding: React.FC = () => {
         }
         else {
             setOnboardingFormData(prev => ({ ...prev, state }));
-            alert(onboardingFormData.state)
         }
 
         if (incomeCategory === '') {
@@ -251,7 +248,6 @@ export const Onboarding: React.FC = () => {
         }
         else {
             setOnboardingFormData(prev => ({ ...prev, incomeCategory }));
-            alert(onboardingFormData.incomeCategory)
         }
 
         if (authUser) {
