@@ -84,7 +84,7 @@ export const SignUp: React.FC = () => {
                 setIsLoading(false);        //if validation fail
                 return;
             } else {
-                setSignUpFormData({ ...signUpFormData, name });
+                setSignUpFormData(prev => ({ ...prev, name }));
 
             }
 
@@ -93,11 +93,11 @@ export const SignUp: React.FC = () => {
                 setIsLoading(false);
                 return;
             } else {
-                setSignUpFormData({ ...signUpFormData, email });
+                setSignUpFormData(prev => ({ ...prev, email }));
             }
 
             if (password === confirmPassword && password !== '') {
-                setSignUpFormData({ ...signUpFormData, password });
+                setSignUpFormData(prev => ({ ...prev, password }));
                 setIsLoading(false);
             } else {
                 triggerLocalSnackbar("Password mismatch", "error")
