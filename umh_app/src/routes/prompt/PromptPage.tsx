@@ -10,6 +10,11 @@ interface responseList {        //defining
     isPrimary: boolean;
 }
 
+interface Subsidy {
+    subsidy_name: string;
+    description: string;
+}
+
 interface ChatMessage {
     sender: 'user' | 'zai' | 'error';
     text?: string;                                  //user message
@@ -85,7 +90,7 @@ export const PromptPage = () => {
                         const cleanString = parsedResponse.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
                         parsedResponse = JSON.parse(cleanString);
                     } catch (parseError) {
-                        console.error("Failed to parse AI string:", parsedResponse);
+                        console.error("Failed to parse AI string:"+ parseError, parsedResponse);
                         setChatHistory((prev) => [...prev, { sender: 'error', text: "AI returned an invalid data format. Please try again." }]);
                         return;
                     }
@@ -109,7 +114,7 @@ export const PromptPage = () => {
                 
                 if (supp && supp.available === "true") {
                     if (Array.isArray(supp.subsidies)) {
-                        supp.subsidies.forEach((sub: any) => {
+                        supp.subsidies.forEach((sub: Subsidy) => {
                             newOptions.push({
                                 title: sub.subsidy_name,
                                 description: sub.description,
