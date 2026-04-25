@@ -213,27 +213,27 @@ export const Dashboard = () => {
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={{ justifyContent: 'center', alignContent: 'center', mt: 6 }}>
         <ThemedGrid
           title={'Utilities'}
-          onClick={() => handleCardClick('Utilities')}
+          onClick={() => handleNavigate("utilities")}
         />
         <ThemedGrid
           title={'Transportation'}
-          onClick={() => handleCardClick('Transportation')}
+          onClick={() => handleNavigate("transportation")}
         />
         <ThemedGrid
           title={'Healthcare'}
-          onClick={() => handleCardClick('Healthcare')}
+          onClick={() => handleNavigate("healthcare")}
         />
         <ThemedGrid
           title={'Education'}
-          onClick={() => handleCardClick('Education')}
+          onClick={() => handleNavigate("education")}
         />
         <ThemedGrid
           title={'Groceries'}
-          onClick={() => handleCardClick('Groceries')}
+          onClick={() => handleNavigate("groceries")}
         />
         <ThemedGrid
           title={'Others'}
-          onClick={() => handleCardClick('Others')}
+          onClick={() => handleNavigate("others")}
         />
       </Grid>
     </Box>
