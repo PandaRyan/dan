@@ -112,30 +112,6 @@ cd ../umh_api
 npm install
 ```
 
-### Environment Variables
-
-Create a `.env` file in `umh_api/`:
-
-```env
-MONGODB_URI=your_mongodb_uri
-JWT_SECRET=your_jwt_secret
-ZAI_API_KEY=your_zai_key
-GEMINI_API_KEY=your_gemini_key
-NEWSDATA_API_KEY=your_newsdata_key
-```
-
-### Running Locally
-
-```bash
-# Terminal 1 — Backend
-cd umh_api
-npm run dev
-
-# Terminal 2 — Frontend
-cd umh_app
-npm run dev
-```
-
 ---
 
 ## 🧪 Testing
