@@ -750,7 +750,7 @@ async function callGemini(usermsg, systemInstructions, userdetails, contextStrin
                 temperature: 0.6,
                 responseMimeType: "application/json"
             },
-            content: usermsg
+            contents: usermsg
         });
 
         const responseText = response.text;
