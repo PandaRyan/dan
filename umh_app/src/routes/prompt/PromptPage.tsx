@@ -16,42 +16,6 @@ interface ChatMessage {
     options?: responseList[];               //if its ai giving options to user
 }
 
-/*
-const initialChatHistory: ChatMessage[] = [
-    {
-        sender: 'user',
-        text: 'I am a B40 student living in Kuala Lumpur. What financial aids are available to me?'
-    },
-    {
-        sender: 'zai',
-        options: [
-            {
-                title: 'MyKasih - Option 1',
-                description: 'MyKasih can be used to apply for targeted subsidies. This option focuses on rapid deployment of funds directly to the linked MyKad accounts for essential groceries.',
-                isPrimary: true,
-            },
-            {
-                title: 'BUDI Madani - Option 2',
-                description: 'BUDI Madani provides monthly cash assistance for agricultural and commodity smallholders.',
-                isPrimary: false,
-            },
-            {
-                title: 'My50 - Option 3',
-                description: 'The My50 Unlimited Travel Pass offers 30 days of unlimited rides on Rapid KL LRT, MRT, Monorail, BRT, and bus services in Klang Valley.',
-                isPrimary: false,
-            }
-        ]
-    },
-    {
-        sender: 'user',
-        text: 'testing error'
-    },
-    {
-        sender: 'error',
-        text: "Error generating response. Please try again."
-    }
-];*/
-
 export const PromptPage = () => {
     const { authUser } = useAuth();
     const navigate = useNavigate();
@@ -181,7 +145,7 @@ export const PromptPage = () => {
 
     useEffect(() => {
         if (!authUser) {
-            navigate('/')
+            navigate('/signin')
         }
         scrollToBottom();           //use if the chat changes
     }, [chatHistory]);
