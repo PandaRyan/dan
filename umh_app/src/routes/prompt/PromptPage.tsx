@@ -56,7 +56,10 @@ export const PromptPage = () => {
     const { authUser } = useAuth();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
-    const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);          //holding conversations
+    const [chatHistory, setChatHistory] = useState<ChatMessage[]>([{
+        sender: 'zai',
+        text: "Hello! Ask me anything related to Malaysian subsidies!"
+    }]);          //holding conversations
 
     const messagesEndRef = useRef<HTMLDivElement>(null);                //for the scrolling
     const [usermsg, setUsermsg] = useState('');

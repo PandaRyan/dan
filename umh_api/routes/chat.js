@@ -98,7 +98,7 @@ router.post('/groceries', async(req, res) => {
                         }
 
                         "supplementary_response": {
-                            available: "true"/"false"
+                            "available": "true"/"false"
                             {
                                 "subsidy_name":
                                 "description":
@@ -196,7 +196,7 @@ let { usermsg, userdetails } = req.body;
                         }
 
                         "supplementary_response": {
-                            available: "true"/"false"
+                            "available": "true"/"false"
                             {
                                 "subsidy_name":
                                 "description":
@@ -294,7 +294,7 @@ router.post('/transportation', async(req, res) => {
                         }
 
                         "supplementary_response": {
-                            available: "true"/"false"
+                            "available": "true"/"false"
                             {
                                 "subsidy_name":
                                 "description":
@@ -392,7 +392,7 @@ router.post('/healthcare', async(req, res) => {
                         }
 
                         "supplementary_response": {
-                            available: "true"/"false"
+                            "available": "true"/"false"
                             {
                                 "subsidy_name":
                                 "description":
@@ -490,7 +490,7 @@ router.post('/education', async(req, res) => {
                         }
 
                         "supplementary_response": {
-                            available: "true"/"false"
+                            "available": "true"/"false"
                             {
                                 "subsidy_name":
                                 "description":
@@ -587,7 +587,7 @@ let { usermsg, userdetails } = req.body;
                         }
 
                         "supplementary_response": {
-                            available: "true"/"false"
+                            "available": "true"/"false"
                             {
                                 "subsidy_name":
                                 "description":
